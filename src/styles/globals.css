@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+@import '../styles/markdown.css';
+@import '../styles/transitions.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-accent: var(--accent);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+}
+
+@layer base {
+    :root {
+        --background: #fdfdfd;
+        --foreground: #282728;
+        --accent: #006cac;
+        --muted: #e6e6e6;
+        --border: #ece9e9;
+    }
+
+    :root.dark {
+        --background: #18181b;
+        --foreground: #d1d5db;
+        --accent: #006cac;
+        --border: #444c56;
+        --code: #2f363d;
+    }
+
+    * {
+        @apply border-border;
+    }
+
+    html {
+        @apply scroll-smooth;
+        font-size: 14px;
+    }
+
+    body {
+        @apply flex min-h-screen flex-col bg-background font-mono text-foreground;
+    }
+}
