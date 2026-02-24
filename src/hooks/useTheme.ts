@@ -19,7 +19,7 @@ export function useTheme() {
         const currentTheme = theme === 'system' ? systemTheme : theme;
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 
-        setTimeout(() => setIsAnimating(false), 300);
+        setTimeout(() => setIsAnimating(false), 500);
     };
 
     return {
