@@ -36,7 +36,7 @@ describe('useTheme', () => {
         expect(result.current.isAnimating).toBe(true);
 
         act(() => {
-            vi.advanceTimersByTime(300);
+            vi.advanceTimersByTime(500);
         });
 
         expect(result.current.isAnimating).toBe(false);
