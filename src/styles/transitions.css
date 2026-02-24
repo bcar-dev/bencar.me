@@ -1,72 +1,11 @@
-/* Custom View Transitions for Directional Links */
-@keyframes astroFadeIn {
-    from {
-        opacity: 0;
-        mix-blend-mode: plus-lighter;
-    }
-
-    to {
-        opacity: 1;
-        mix-blend-mode: plus-lighter;
-    }
+/* Disable all inner element view transitions during directional navigation so the root crossfade is absolute */
+html[data-direction] *:not(html) {
+    view-transition-name: none !important;
 }
 
-@keyframes astroFadeOut {
-    from {
-        opacity: 1;
-        mix-blend-mode: plus-lighter;
-    }
-
-    to {
-        opacity: 0;
-        mix-blend-mode: plus-lighter;
-    }
-}
-
-@keyframes astroSlideFromRight {
-    from {
-        transform: translateX(100%);
-    }
-}
-
-@keyframes astroSlideToLeft {
-    to {
-        transform: translateX(-100%);
-    }
-}
-
-@keyframes astroSlideFromLeft {
-    from {
-        transform: translateX(-100%);
-    }
-}
-
-@keyframes astroSlideToRight {
-    to {
-        transform: translateX(100%);
-    }
-}
-
-html[data-direction='next']::view-transition-old(post-content) {
-    animation:
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroFadeOut,
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroSlideToLeft;
-}
-
-html[data-direction='next']::view-transition-new(post-content) {
-    animation:
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroFadeIn,
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroSlideFromRight;
-}
-
-html[data-direction='prev']::view-transition-old(post-content) {
-    animation:
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroFadeOut,
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroSlideToRight;
-}
-
-html[data-direction='prev']::view-transition-new(post-content) {
-    animation:
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroFadeIn,
-        180ms cubic-bezier(0.76, 0, 0.24, 1) both astroSlideFromLeft;
+/* Extend the browser's native root crossfade duration */
+html[data-direction]::view-transition-old(root),
+html[data-direction]::view-transition-new(root) {
+    animation-duration: 500ms;
+    animation-timing-function: ease-in-out;
 }
