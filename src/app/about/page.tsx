@@ -11,7 +11,7 @@ export default function About() {
             <h1 className="my-8 text-2xl font-bold tracking-wider sm:text-4xl">About Me</h1>
             <div className="prose dark:prose-invert prose-lg text-foreground/80 leading-relaxed font-mono mt-4">
                 <p className="mb-4">
-                    Hi, I'm {siteConfig.author.pseudonym}. I'm a software engineer—that's my thing.
+                    Hi, I'm {siteConfig.author.pseudonym}. I'm a software engineer-that's my thing.
                     But above all, I like to understand how things work. I enjoy peeling back the layers of the onion and understanding how things really work below the surface.
                     Whether it's something completely out of our hands like a solar system or something carefully crafted like a piece of software, I always enjoy taking the journey to feed my curiosity.
                 </p>
