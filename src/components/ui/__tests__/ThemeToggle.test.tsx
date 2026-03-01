@@ -18,6 +18,7 @@ describe('ThemeToggle', () => {
     it('renders correctly when not animating', () => {
         vi.mocked(useTheme).mockReturnValue({
             isAnimating: false,
+            isDark: false,
             toggleTheme: mockToggleTheme,
         });
 
@@ -30,6 +31,7 @@ describe('ThemeToggle', () => {
     it('calls toggleTheme on click', () => {
         vi.mocked(useTheme).mockReturnValue({
             isAnimating: false,
+            isDark: false,
             toggleTheme: mockToggleTheme,
         });
 
@@ -42,6 +44,7 @@ describe('ThemeToggle', () => {
     it('disables interaction when animating', () => {
         vi.mocked(useTheme).mockReturnValue({
             isAnimating: true,
+            isDark: false,
             toggleTheme: mockToggleTheme,
         });
 

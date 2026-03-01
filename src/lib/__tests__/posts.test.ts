@@ -15,6 +15,34 @@ vi.mock('react', () => ({
     cache: vi.fn((fn) => fn),
 }));
 
+vi.mock('remark', async (importOriginal) => {
+    const mod = await importOriginal<typeof import('remark')>();
+    return {
+        ...mod,
+        remark: () => {
+            const originalRemark = mod.remark();
+            return {
+                ...originalRemark,
+                parse: (content: string) => {
+                    if (content === 'dummy_no_position_data') {
+                        return {
+                            type: 'root',
+                            children: [
+                                {
+                                    type: 'heading',
+                                    depth: 2,
+                                    children: [{ type: 'text', value: 'No Position' }],
+                                },
+                            ],
+                        } as any;
+                    }
+                    return originalRemark.parse(content);
+                },
+            };
+        },
+    };
+});
+
 vi.mock('fs', () => ({
     default: {
         existsSync: vi.fn(),
@@ -59,11 +87,25 @@ More text
         const content = '# Only H1\nJust text';
         expect(extractHeadings(content)).toEqual([]);
     });
+
+    it('handles inline code inside headings', () => {
+        const content = '## Title with `code`';
+        const headings = extractHeadings(content);
+        expect(headings).toHaveLength(1);
+        expect(headings[0].text).toBe('Title with code');
+        expect(headings[0].slug).toBe('title-with-code');
+    });
+
+    it('handles nodes without position data', () => {
+        const headings = extractHeadings('dummy_no_position_data');
+        expect(headings).toHaveLength(1);
+        expect(headings[0].index).toBe(0);
+    });
 });
 
 describe('cleanMarkdown', () => {
     it('removes markdown symbols', () => {
-        expect(cleanMarkdown('# Heading **Bold** [Link](url)')).toBe('Heading Bold Linkurl');
+        expect(cleanMarkdown('# Heading **Bold** [Link](url)')).toBe('Heading Bold Link');
     });
 
     it('collapses multiple newlines to a single space', () => {
@@ -173,18 +215,18 @@ describe('filesystem dependent functions', () => {
 
     describe('searchPosts', () => {
         it('returns empty array for short or empty queries', () => {
-            expect(searchPosts('a')).toEqual([]);
-            expect(searchPosts('')).toEqual([]);
+            expect(searchPosts('a').results).toEqual([]);
+            expect(searchPosts('').results).toEqual([]);
         });
 
         it('returns results for matching title', () => {
-            const results = searchPosts('Post 1');
+            const { results } = searchPosts('Post 1');
             expect(results).toHaveLength(1);
             expect(results[0].slug).toBe('post1');
         });
 
         it('returns results with snippets', () => {
-            const results = searchPosts('Content');
+            const { results } = searchPosts('Content');
             expect(results).toHaveLength(2);
             expect(results[0].matches[0].snippets[0]).toContain('Content');
         });
@@ -198,7 +240,7 @@ describe('filesystem dependent functions', () => {
                 { name: 'heading.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             expect(results).toHaveLength(1);
             expect(results[0].matches[0].heading?.text).toBe('Subtitle');
             expect(results[0].matches[0].snippets).toHaveLength(1);
@@ -212,7 +254,7 @@ describe('filesystem dependent functions', () => {
                 { name: 'matching-heading.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             expect(results).toHaveLength(1);
             expect(results[0].matches).toHaveLength(1);
             expect(results[0].matches[0].heading?.text).toBe('Target');
@@ -226,7 +268,7 @@ describe('filesystem dependent functions', () => {
                 { name: 'prefix.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             expect(results[0].matches[0].heading).toBeNull();
         });
 
@@ -240,7 +282,7 @@ describe('filesystem dependent functions', () => {
                 { name: 'multi.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             expect(results[0].matches[0].snippets).toHaveLength(2);
         });
 
@@ -252,7 +294,7 @@ describe('filesystem dependent functions', () => {
                 { name: 'noprefix.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             // First match group should be Heading, not null
             expect(results[0].matches[0].heading).not.toBeNull();
         });
@@ -264,7 +306,7 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.readdirSync).mockReturnValue([
                 { name: 'title.md', isDirectory: () => false },
             ] as any);
-            expect(searchPosts('MatchTitle')).toHaveLength(1);
+            expect(searchPosts('MatchTitle').results).toHaveLength(1);
         });
 
         it('scoring: matches description only', () => {
@@ -274,7 +316,7 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.readdirSync).mockReturnValue([
                 { name: 'desc.md', isDirectory: () => false },
             ] as any);
-            expect(searchPosts('MatchDesc')).toHaveLength(1);
+            expect(searchPosts('MatchDesc').results).toHaveLength(1);
         });
 
         it('scoring: matches tags only', () => {
@@ -284,7 +326,7 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.readdirSync).mockReturnValue([
                 { name: 'tags.md', isDirectory: () => false },
             ] as any);
-            expect(searchPosts('MatchTag')).toHaveLength(1);
+            expect(searchPosts('MatchTag').results).toHaveLength(1);
         });
 
         it('scoring: matches content only', () => {
@@ -294,7 +336,7 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.readdirSync).mockReturnValue([
                 { name: 'content.md', isDirectory: () => false },
             ] as any);
-            expect(searchPosts('MatchContent')).toHaveLength(1);
+            expect(searchPosts('MatchContent').results).toHaveLength(1);
         });
 
         it('skips non-matching posts', () => {
@@ -304,7 +346,7 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.readdirSync).mockReturnValue([
                 { name: 'none.md', isDirectory: () => false },
             ] as any);
-            expect(searchPosts('Unrelated')).toHaveLength(0);
+            expect(searchPosts('Unrelated').results).toHaveLength(0);
         });
 
         it('handles search query matching multiple headings', () => {
@@ -315,14 +357,36 @@ describe('filesystem dependent functions', () => {
                 { name: 'multih.md', isDirectory: () => false },
             ] as any);
 
-            const results = searchPosts('Target');
+            const { results } = searchPosts('Target');
             expect(results[0].matches).toHaveLength(2);
+        });
+
+        it('respects occurrence limit during pagination', () => {
+            const mockPostOccur =
+                '---\ntitle: t\ndescription: d\npubDatetime: 2026-01-01\ntags: []\ndraft: false\n---\nTarget Target Target Target';
+            const mockPostOccur2 =
+                '---\ntitle: t2\ndescription: d\npubDatetime: 2026-01-01\ntags: []\ndraft: false\n---\nTarget Target Target Target';
+
+            vi.mocked(fs.readFileSync).mockImplementation((path: any) => {
+                if (path.includes('occur1.md')) return mockPostOccur;
+                if (path.includes('occur2.md')) return mockPostOccur2;
+                return '';
+            });
+            vi.mocked(fs.readdirSync).mockReturnValue([
+                { name: 'occur1.md', isDirectory: () => false },
+                { name: 'occur2.md', isDirectory: () => false },
+            ] as any);
+
+            // Should skip the second post if limit is 2
+            const { results, nextOffset } = searchPosts('Target', 2);
+            expect(results).toHaveLength(1);
+            expect(nextOffset).toBe(1);
         });
     });
 
     describe('input validation', () => {
         it('handles undefined inputs gracefully', () => {
-            expect(searchPosts(undefined as any)).toEqual([]);
+            expect(searchPosts(undefined as any).results).toEqual([]);
             expect(extractHeadings(undefined as any)).toEqual([]);
         });
     });
@@ -408,7 +472,7 @@ describe('filesystem dependent functions', () => {
             ] as any);
 
             expect(getAllTags()).toEqual([]);
-            const results = searchPosts('Content');
+            const { results } = searchPosts('Content');
             expect(results[0].tags).toEqual([]);
         });
     });
