@@ -9,6 +9,7 @@ import Tag from '@/components/ui/Tag';
 import PostTitle from '@/components/ui/PostTitle';
 import PostMeta from '@/components/ui/PostMeta';
 import { useDebounce } from '@/hooks/useDebounce';
+import { siteConfig } from '@/config/site';
 
 function HighlightMatch({ text, query }: { text: string; query: string }) {
     if (!query || query.length < 2) return <>{text}</>;
@@ -37,34 +38,57 @@ function SearchContent() {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [searched, setSearched] = useState(false);
+    const [nextOffset, setNextOffset] = useState(0);
 
-    const doSearch = useCallback(async (q: string) => {
-        if (q.length < 2) {
-            setResults([]);
-            setCount(0);
-            setSearched(false);
-            return;
-        }
+    const doSearch = useCallback(
+        async (q: string, currentOffset: number = 0, append: boolean = false) => {
+            if (q.length < 2) {
+                setResults([]);
+                setCount(0);
+                setSearched(false);
+                setNextOffset(0);
+                return;
+            }
 
-        setLoading(true);
-        try {
-            const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-            const data = await res.json();
-            setResults(data.results);
-            setCount(data.count);
-            setSearched(true);
-        } catch {
-            setResults([]);
-            setCount(0);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+            if (append) {
+                setLoadingMore(true);
+            } else {
+                setLoading(true);
+            }
+
+            try {
+                const res = await fetch(
+                    `/api/search?q=${encodeURIComponent(q)}&offset=${currentOffset}&occurrenceLimit=${siteConfig.search.occurrenceLimit}`
+                );
+                const data = await res.json();
+
+                if (append) {
+                    setResults((prev) => [...prev, ...data.results]);
+                } else {
+                    setResults(data.results);
+                }
+
+                setCount(data.count);
+                setNextOffset(data.nextOffset);
+                setSearched(true);
+            } catch {
+                if (!append) {
+                    setResults([]);
+                    setCount(0);
+                }
+            } finally {
+                setLoading(false);
+                setLoadingMore(false);
+            }
+        },
+        []
+    );
 
     // Perform search when debounced query changes
     useEffect(() => {
-        doSearch(debouncedQuery);
+        doSearch(debouncedQuery, 0, false);
 
         // Update URL
         if (debouncedQuery.length >= 2) {
@@ -74,13 +98,17 @@ function SearchContent() {
         }
     }, [debouncedQuery, doSearch, router]);
 
-    // Initial search on mount if q param is present happens naturally via initialization of state
+    const handleLoadMore = () => {
+        if (nextOffset === -1) return;
+        doSearch(debouncedQuery, nextOffset, true);
+    };
 
     const handleClear = () => {
         setQuery('');
         setResults([]);
         setCount(0);
         setSearched(false);
+        setNextOffset(0);
         router.replace('/search', { scroll: false });
     };
 
@@ -192,6 +220,19 @@ function SearchContent() {
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {/* Load More */}
+            {searched && !loading && nextOffset !== -1 && (
+                <div className="mt-12 flex justify-center">
+                    <button
+                        onClick={handleLoadMore}
+                        disabled={loadingMore}
+                        className="px-6 py-2 rounded-md border border-border bg-background hover:bg-foreground/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                    >
+                        {loadingMore ? 'Loading...' : `Load more results`}
+                    </button>
+                </div>
             )}
         </div>
     );

@@ -8,8 +8,28 @@ vi.mock('../DirectionalLink', () => ({
 }));
 
 describe('PostNavigation', () => {
-    const prevPost = { slug: 'prev', frontmatter: { title: 'Previous Title' } };
-    const nextPost = { slug: 'next', frontmatter: { title: 'Next Title' } };
+    const prevPost = {
+        slug: 'prev',
+        frontmatter: {
+            title: 'Previous Title',
+            description: '',
+            pubDatetime: '2023-01-01T00:00:00.000Z',
+            tags: [],
+        },
+        content: '',
+        readingTime: '0 min',
+    };
+    const nextPost = {
+        slug: 'next',
+        frontmatter: {
+            title: 'Next Title',
+            description: '',
+            pubDatetime: '2023-01-01T00:00:00.000Z',
+            tags: [],
+        },
+        content: '',
+        readingTime: '0 min',
+    };
 
     it('renders null if no posts provided', () => {
         const { container } = render(<PostNavigation prevPost={null} nextPost={null} />);

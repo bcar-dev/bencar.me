@@ -49,4 +49,4 @@ What surprised me most about this whole process is not how much faster I can wri
 
 The tooling will keep evolving, and some of what I am using now will probably feel quaint in a year - but the underlying shift, spending less cognitive energy on the mechanical and more on the meaningful, feels durable in a way that the specific tools do not. I will keep updating this as things change, and I am curious to hear what has actually stuck for others working in similar contexts.
 
-*What tools or workflows have genuinely changed how you work - and which ones didn't survive contact with a real codebase?*
+_What tools or workflows have genuinely changed how you work - and which ones didn't survive contact with a real codebase?_

@@ -11,7 +11,11 @@ import type {
     MonthGroup,
     YearGroup,
 } from '@/types';
-import { slugify } from '@/lib/slugify';
+import removeMd from 'remove-markdown';
+import GithubSlugger from 'github-slugger';
+import { remark } from 'remark';
+import { visit } from 'unist-util-visit';
+import type { Heading, Text } from 'mdast';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/blog');
 
@@ -97,12 +101,26 @@ export function getAllTags(): string[] {
  */
 export function extractHeadings(content: string): { text: string; slug: string; index: number }[] {
     const headings: { text: string; slug: string; index: number }[] = [];
-    const regex = /^#{2,3}\s+(.+)$/gm;
-    let match;
-    while ((match = regex.exec(content)) !== null) {
-        const text = match[1].trim();
-        headings.push({ text, slug: slugify(text), index: match.index });
-    }
+    const slugger = new GithubSlugger();
+    const ast = remark().parse(content);
+
+    visit(ast, 'heading', (node: Heading) => {
+        if (node.depth === 2 || node.depth === 3) {
+            let text = '';
+            visit(node, 'text', (textNode: Text) => {
+                text += textNode.value;
+            });
+            visit(node, 'inlineCode', (codeNode: { value: string }) => {
+                text += codeNode.value;
+            });
+
+            text = text.trim();
+            const index = node.position?.start.offset ?? 0;
+
+            headings.push({ text, slug: slugger.slug(text), index });
+        }
+    });
+
     return headings;
 }
 
@@ -110,10 +128,7 @@ export function extractHeadings(content: string): { text: string; slug: string; 
  * Clean markdown syntax from a text snippet for display.
  */
 export function cleanMarkdown(text: string): string {
-    return text
-        .replace(/[#*_`~>[\]()!]/g, '')
-        .replace(/\n+/g, ' ')
-        .trim();
+    return removeMd(text).replace(/\n+/g, ' ').trim();
 }
 
 /**
@@ -123,22 +138,19 @@ export function extractAllSnippets(
     content: string,
     query: string
 ): { text: string; idx: number }[] {
-    const lower = content.toLowerCase();
-    const q = query.toLowerCase();
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`\\b${escapedQuery}`, 'gi');
     const snippets: { text: string; idx: number }[] = [];
-    let searchFrom = 0;
     let lastEnd = -1;
 
-    while (searchFrom < lower.length) {
-        const idx = lower.indexOf(q, searchFrom);
-        if (idx === -1) break;
-
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+        const idx = match.index;
         const start = Math.max(0, idx - 60);
         const end = Math.min(content.length, idx + query.length + 90);
 
         // Skip if this snippet overlaps with the previous one
         if (start <= lastEnd) {
-            searchFrom = idx + query.length;
             continue;
         }
 
@@ -148,7 +160,6 @@ export function extractAllSnippets(
         snippets.push({ text: snippet, idx });
 
         lastEnd = end;
-        searchFrom = idx + query.length;
     }
 
     // If no content matches, show beginning of content
@@ -161,90 +172,145 @@ export function extractAllSnippets(
 
 /**
  * Search posts by query across title, description, tags, and content.
- * Returns results sorted by relevance.
+ * Returns results sorted by relevance, with occurrence-based pagination support.
  */
-export function searchPosts(query: string): SearchResult[] {
-    if (!query || query.length < 2) return [];
+export function searchPosts(
+    query: string,
+    occurrenceLimit: number = 100,
+    articleOffset: number = 0
+): {
+    results: SearchResult[];
+    totalOccurrences: number;
+    totalArticles: number;
+    nextOffset: number;
+} {
+    if (!query || query.length < 2) {
+        return { results: [], totalOccurrences: 0, totalArticles: 0, nextOffset: 0 };
+    }
 
     const posts = getAllPosts();
-    const q = query.toLowerCase();
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regexGi = new RegExp(`\\b${escapedQuery}`, 'gi');
 
-    const scored: { post: Post; score: number }[] = [];
+    const scored: { post: Post; score: number; occurrences: number }[] = [];
+    let globalTotalOccurrences = 0;
 
     for (const post of posts) {
-        let score = 0;
         const { title, description, tags } = post.frontmatter;
 
-        if (title.toLowerCase().includes(q)) score += 4;
-        if (description.toLowerCase().includes(q)) score += 3;
-        if (tags?.some((t) => t.toLowerCase().includes(q))) score += 2;
-        if (post.content.toLowerCase().includes(q)) score += 1;
+        // Calculate occurrences for the global count and per-post count
+        const titleOccurrences = (title.match(regexGi) || []).length;
+        const descOccurrences = (description.match(regexGi) || []).length;
+        const tagOccurrences =
+            tags?.reduce((acc, t) => acc + (t.match(regexGi) || []).length, 0) ?? 0;
+        const contentOccurrences = (post.content.match(regexGi) || []).length;
 
-        if (score > 0) {
-            scored.push({ post, score });
+        const postOccurrences =
+            titleOccurrences + descOccurrences + tagOccurrences + contentOccurrences;
+        globalTotalOccurrences += postOccurrences;
+
+        if (postOccurrences > 0) {
+            // Calculate relevance score
+            let score = 0;
+            if (titleOccurrences > 0) score += 4;
+            if (descOccurrences > 0) score += 3;
+            if (tagOccurrences > 0) score += 2;
+            if (contentOccurrences > 0) score += 1;
+
+            scored.push({ post, score, occurrences: postOccurrences });
         }
     }
 
-    return scored
-        .sort((a, b) => b.score - a.score)
-        .map(({ post }) => {
-            const allHeadings = extractHeadings(post.content);
-            const snippetsWithIdx = extractAllSnippets(post.content, query);
+    const sortedScored = scored.sort((a, b) => b.score - a.score);
+    const totalArticles = sortedScored.length;
 
-            const matchGroups: SearchMatchGroup[] = [];
-            const noneGroup: SearchMatchGroup = { heading: null, snippets: [] };
-            const headingGroups = new Map<string, SearchMatchGroup>();
+    // Apply occurrence-based pagination
+    const paginatedScored: { post: Post; score: number; occurrences: number }[] = [];
+    let currentBatchOccurrences = 0;
+    let nextOffset = articleOffset;
 
-            for (const h of allHeadings) {
-                if (h.text.toLowerCase().includes(q)) {
-                    headingGroups.set(h.slug, {
-                        heading: { text: h.text, slug: h.slug },
+    for (let i = articleOffset; i < sortedScored.length; i++) {
+        const item = sortedScored[i];
+        paginatedScored.push(item);
+        currentBatchOccurrences += item.occurrences;
+        nextOffset = i + 1;
+
+        if (currentBatchOccurrences >= occurrenceLimit) {
+            break;
+        }
+    }
+
+    // If we've reached the end of all articles, set nextOffset to -1 or similar (or just check against totalArticles)
+    if (nextOffset >= sortedScored.length) {
+        nextOffset = -1; // Indicates no more results
+    }
+
+    const results = paginatedScored.map(({ post }) => {
+        const allHeadings = extractHeadings(post.content);
+        const snippetsWithIdx = extractAllSnippets(post.content, query);
+
+        const matchGroups: SearchMatchGroup[] = [];
+        const noneGroup: SearchMatchGroup = { heading: null, snippets: [] };
+        const headingGroups = new Map<string, SearchMatchGroup>();
+
+        for (const h of allHeadings) {
+            regexGi.lastIndex = 0;
+            if (regexGi.test(h.text)) {
+                headingGroups.set(h.slug, {
+                    heading: { text: h.text, slug: h.slug },
+                    snippets: [],
+                });
+            }
+        }
+
+        for (const snip of snippetsWithIdx) {
+            let currentHeading: { text: string; slug: string } | null = null;
+            for (let i = allHeadings.length - 1; i >= 0; i--) {
+                if (snip.idx >= allHeadings[i].index) {
+                    currentHeading = { text: allHeadings[i].text, slug: allHeadings[i].slug };
+                    break;
+                }
+            }
+
+            if (currentHeading) {
+                if (!headingGroups.has(currentHeading.slug)) {
+                    headingGroups.set(currentHeading.slug, {
+                        heading: currentHeading,
                         snippets: [],
                     });
                 }
+                headingGroups.get(currentHeading.slug)!.snippets.push(snip.text);
+            } else {
+                noneGroup.snippets.push(snip.text);
             }
+        }
 
-            for (const snip of snippetsWithIdx) {
-                let currentHeading: { text: string; slug: string } | null = null;
-                for (let i = allHeadings.length - 1; i >= 0; i--) {
-                    if (snip.idx >= allHeadings[i].index) {
-                        currentHeading = { text: allHeadings[i].text, slug: allHeadings[i].slug };
-                        break;
-                    }
-                }
+        if (noneGroup.snippets.length > 0) {
+            matchGroups.push(noneGroup);
+        }
 
-                if (currentHeading) {
-                    if (!headingGroups.has(currentHeading.slug)) {
-                        headingGroups.set(currentHeading.slug, {
-                            heading: currentHeading,
-                            snippets: [],
-                        });
-                    }
-                    headingGroups.get(currentHeading.slug)!.snippets.push(snip.text);
-                } else {
-                    noneGroup.snippets.push(snip.text);
-                }
+        for (const h of allHeadings) {
+            if (headingGroups.has(h.slug)) {
+                matchGroups.push(headingGroups.get(h.slug)!);
             }
+        }
 
-            if (noneGroup.snippets.length > 0) {
-                matchGroups.push(noneGroup);
-            }
+        return {
+            slug: post.slug,
+            title: post.frontmatter.title,
+            date: post.frontmatter.pubDatetime,
+            readingTime: post.readingTime,
+            tags: post.frontmatter.tags ?? [],
+            matches: matchGroups,
+        };
+    });
 
-            for (const h of allHeadings) {
-                if (headingGroups.has(h.slug)) {
-                    matchGroups.push(headingGroups.get(h.slug)!);
-                }
-            }
-
-            return {
-                slug: post.slug,
-                title: post.frontmatter.title,
-                date: post.frontmatter.pubDatetime,
-                readingTime: post.readingTime,
-                tags: post.frontmatter.tags ?? [],
-                matches: matchGroups,
-            };
-        });
+    return {
+        results,
+        totalOccurrences: globalTotalOccurrences,
+        totalArticles,
+        nextOffset,
+    };
 }
 
 /**
