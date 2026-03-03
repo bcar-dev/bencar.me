@@ -25,7 +25,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
 
     return (
         <aside className="not-prose my-10 p-5 rounded-lg border border-border bg-surface dark:bg-surface-alt/50 shadow-sm text-text-muted mb-12">
-            <h2 className="text-lg font-bold mb-3 flex items-center gap-2 text-text">
+            <h2 className="text-lg font-bold mt-0 mb-3 flex items-center gap-2 text-text">
                 <span className="text-accent">
                     <FiList className="w-4 h-4" />
                 </span>
@@ -47,7 +47,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
                                 <a
                                     href={`#${heading.slug}`}
                                     onClick={(e) => handleClick(e, heading.slug)}
-                                    className="hover:text-accent transition-colors block text-sm sm:text-base leading-snug"
+                                    className="hover:text-accent transition-all duration-200 ease-out inline-block hover:scale-[1.02] origin-left text-sm sm:text-base leading-snug"
                                 >
                                     <span className="text-text-muted mr-1.5 opacity-70 font-medium">
                                         {prefix}
