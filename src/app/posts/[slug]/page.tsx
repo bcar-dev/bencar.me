@@ -6,6 +6,7 @@ import PostMeta from '@/components/ui/PostMeta';
 import BackToTop from '@/components/ui/BackToTop';
 import MarkdownRenderer from '@/components/ui/MarkdownRenderer';
 import PostNavigation from '@/components/ui/PostNavigation';
+import ReadingProgress from '@/components/ui/ReadingProgress';
 import { siteConfig } from '@/config/site';
 
 export async function generateStaticParams() {
@@ -55,6 +56,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
     return (
         <article className="py-8 w-full" style={{ viewTransitionName: 'post-content' }}>
+            <ReadingProgress />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
