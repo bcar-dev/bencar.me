@@ -4,7 +4,7 @@ description: 'How I went from chasing over-engineered agentic workflows to a lig
 pubDatetime: 2026-02-28T12:30:00+01:00
 tags: ['development', 'ai', 'agents', 'workflow']
 heroImage: '/assets/img/2026/building-a-practical-ai-coding-setup-for-legacy-codebases/factory-library.png'
-heroImageAlt: 'Cursor, Gemini and Clawd fighting with minecraft swords on a Ghostty computer terminal.'
+heroImageAlt: 'A dark factory converted to a library, with books on the shelves and a computer terminal in the center.'
 ---
 
 For years, I thought I had my development setup figured out - the right editor, the right extensions, the right habits - and then agentic AI came along and quietly made everything I knew feel a little outdated, not in a dramatic way, but in the slow, creeping way where you realize the tools you ignored for months have become things you can no longer imagine working without.
@@ -15,7 +15,7 @@ The results were immediate enough to be surprising. Tasks that would have sent m
 
 That early win, though, turned out to be a little deceptive - it made me think that more tooling, more structure, more process would compound those gains linearly, and that assumption sent me down a rabbit hole that took a few months to fully climb out of.
 
-## The Rube Goldberg Phase
+## The Rube Goldberg phase
 
 Or how to overthink it.
 
@@ -27,7 +27,7 @@ The vibe kanban approach was lighter, and I will admit it helped me ship code fa
 
 What I needed was not a framework designed for scale or for greenfield development - it was something I could use daily, on a legacy codebase, without adding enough overhead to offset the gains.
 
-## The Tools That Actually Changed My Workflow
+## The tools that actually changed my workflow
 
 The answer, as it turned out, was not a new methodology but a sharper set of tools - things that quietly removed friction rather than adding structure on top of it.
 
@@ -41,7 +41,7 @@ The answer, as it turned out, was not a new methodology but a sharper set of too
 
 A few smaller things that made a real difference: keeping your `AGENTS.md` or `CLAUDE.md` as lean as possible - every line of overhead you add there is overhead the agent carries on every single request - and if you are using Claude Code, [the on-demand tool loading feature ](https://www.anthropic.com/engineering/advanced-tool-use)(`ENABLE_TOOL_SEARCH=true`) is worth enabling, as it keeps the active toolset focused rather than sprawling.
 
-## Where This Actually Lands
+## Where this actually lands
 
 The honest summary is that the tools which stuck were the ones that solved a specific, concrete friction point in my daily work - not the ones that promised to transform the entire way I thought about software development, even if some of those were genuinely interesting to explore.
 
