@@ -1,6 +1,6 @@
 ---
 title: 'Why the best learning experience feels like a game'
-description: 'Why does gamification actually work and how can you use it to learn more effectively.'
+description: 'Why does gamification actually work and how can you use it to learn more effectively. Learn about the theory, how it is already applied at scale and how you can start using those principles in your daily work.'
 pubDatetime: 2026-03-07T22:30:00+01:00
 tags: ['development', 'learning']
 heroImage: '/assets/img/2026/best-learning-experience-feels-like-a-game/classroom-origami.jpeg'
@@ -55,10 +55,8 @@ In 2022, GitHub added personal achievement badges, displayed publicly on your pr
 
 Platforms like CodinGame, Advent of Code, and Codewars have applied the same logic more explicitly, turning algorithm practice into puzzles, annual community events, and martial-arts-style ranking systems. Millions of developers engage with them voluntarily, in their spare time, to practice skills they could just as easily ignore.
 
-## What This Means for Your Daily Work
+## What this means for your daily work
 
 You don't need a new platform to start applying this. The principles are transferable to how you structure your own growth.
 
 **Start small: gamify your todo list.** It sounds almost trivially simple, but a task list with a daily completion counter, a streak indicator, or even just a satisfying visual checkbox does something real: it makes progress *visible*. That's the core of what gamification offers. Not complexity - legibility. When you can see that your effort is producing results, you come back tomorrow.
-
-One word of caution: poorly designed gamification is worse than none at all. Systems that rank people publ
