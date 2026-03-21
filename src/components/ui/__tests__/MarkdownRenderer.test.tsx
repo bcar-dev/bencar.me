@@ -59,7 +59,7 @@ describe('MarkdownRenderer', () => {
         const content = '![Alt text](/test-image.png)';
         const { container } = render(<MarkdownRenderer content={content} />);
 
-        const spanContainer = container.querySelector('span.relative.block.w-full.aspect-video');
+        const spanContainer = container.querySelector('span.block.w-full.my-4');
         expect(spanContainer).toBeInTheDocument();
 
         const img = container.querySelector('img');
@@ -98,7 +98,7 @@ describe('MarkdownRenderer', () => {
     });
 
     it('returns null if table-of-contents data is invalid', () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
         const renderToc = (markdownComponents as any)['table-of-contents'] as (props: any) => any;
         const result = renderToc({ 'data-headings': '{ invalid json' });
         expect(result).toBeNull();
@@ -108,7 +108,7 @@ describe('MarkdownRenderer', () => {
     it.skipIf(typeof navigator !== 'undefined' && !navigator.userAgent.includes('jsdom'))(
         'returns null and does not log if table-of-contents data is invalid in production',
         () => {
-            const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+            const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
             vi.stubEnv('NODE_ENV', 'production');
             const renderToc = (markdownComponents as any)['table-of-contents'] as (
                 props: any
