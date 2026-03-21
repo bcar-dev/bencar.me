@@ -24,6 +24,8 @@ The early morning ride is a different religion. The roads are empty, the light i
 
 The post-work ride is often the easiest one to skeep. You're tired, your brain is full from a day of work, and the sofa is *right there*. The key here is commitment, change into your kit the moment you get home. Once you're in bib shorts, you're committed. Nobody sits back down on the sofa in bib shorts.
 
+![Backcountry road](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/backcountry-road.jpeg)
+
 ## Gym work: the underrated foundation
 
 Before your legs are ready for hard efforts on the bike, the gym can do a lot of the groundwork. 
@@ -32,7 +34,9 @@ Cyclists often neglect strength training, which is a mistake, especially when re
 
 Two sessions a week in the first month will pay dividends the rest of the season. You'll get back to full fitness faster, and you'll be more robust when you do start pushing harder.
 
-## Riding with friends: the best reason to get out
+## Riding with friends
+
+![The beautiful cote d'Azur](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-1.jpeg)
 
 Even though I'm not personally a huge fan of group rides, because I like to have only wind in front of me and find my own rythm, pushing pedals at my own pace, I have to admit that they are a great way to stay motivated and to discover new places. 
 
@@ -51,3 +55,5 @@ The rides have been hard enough to remind me why I started cycling in the first 
 This is what riding with friends gives you: not just kilometres, but memories attached to those kilometres. Landscapes you'll associate with a conversation, a climb, a shared struggle or a moment of unexpected beauty after a turn.
 
 *Currently riding in Grasse, France. Not coming back before next week.*
+
+![Last one for the road](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-2.jpeg)

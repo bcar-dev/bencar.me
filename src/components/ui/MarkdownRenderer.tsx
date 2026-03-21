@@ -25,13 +25,15 @@ export const markdownComponents: Components = {
     img: (image: ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }) => {
         if (!image.src || typeof image.src !== 'string') return null;
         return (
-            <span className="relative block w-full aspect-video my-8 overflow-hidden rounded-lg bg-muted/20">
+            <span className="block w-full my-4 overflow-hidden rounded-lg">
                 <Image
                     src={image.src}
                     alt={image.alt || 'Markdown Image'}
-                    fill
+                    width={0}
+                    height={0}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-contain"
+                    style={{ width: '100%', height: 'auto' }}
+                    className="!m-0"
                 />
             </span>
         );
