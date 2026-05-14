@@ -1,11 +1,11 @@
---
+---
 title: 'The tools I actually use'
 description: 'An honest look at my daily tech stack: the editors, CLI tools, plugins, and small utilities that survived months of daily use on real projects.'
 pubDatetime: 2026-05-14T14:00:00+02:00
 tags: ['development', 'workflow', 'tools']
 heroImage: '/assets/img/2026/the-tools-i-actually-use/developer-at-night.png'
 heroImageAlt: "A generated, nime-style illustration of a hoodie-wearing developer coding late at night in a cozy modern workspace, seated in a Herman Miller Aeron chair facing dual monitors filled with code. The room is softly lit with warm ambient lighting, plants, posters, and tech accessories, while a nighttime city skyline glows through the window, creating a cinematic and focused atmosphere."
---
+---
 
 There is a difference between the tools you try and the tools you keep. Over the past year or so, I have tried dozens of editors, terminals, CLI utilities, and AI plugins, and most of them did not survive more than a week or two of real use. What follows is the set that did. It's the things I reach for every day without thinking about it, which is probably the best metric for whether a tool actually works.
 
