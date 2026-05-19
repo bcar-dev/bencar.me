@@ -40,7 +40,7 @@ The default Unix utilities are fine, but there are replacements that are just be
 
 ## Data tools
 
-**DataGrip** with the AWS Toolkit and Big Data Tools plugins handles everything database-related. I have tried lighter alternatives, but for the kind of work I do. For querying across multiple databases, working with large datasets, managing connections to various AWS services, nothing else comes close
+**DataGrip** with the AWS Toolkit and Big Data Tools plugins handles everything database-related. I have tried lighter alternatives, but for the kind of work I do: querying across multiple databases, working with large datasets, managing connections to various AWS services; nothing else comes close.
 
 ## Claude Code plugins
 
@@ -51,11 +51,13 @@ The default Unix utilities are fine, but there are replacements that are just be
 - **Caveman** - compresses agent output by roughly 75%, making responses faster and cheaper without losing technical accuracy
 - **Colgrep** - semantic code search that combines regex filtering with AI-powered ranking, right from the terminal
 
-With Caveman, Colgrep, Serena, and rtk combined, I never find myself reaching Anthropic's Max $100/month plan limit. I would strongly recommend these tools to anyone looking to get more out of their token budget.
+With Caveman, Colgrep, Serena, and rtk combined, I never find myself reaching Anthropic's Max $100/month plan limit. I would strongly recommend these tools to anyone looking to get more out of their token budget. 
+
+I sometimes manually prompt Caveman off for when I need to understand something, the brevity of the response is sometimes not very helpful for when learning new stuff.
 
 ## The small things
 
-**Boop** for quick text transformations, Base64 encoding, JSON formatting, URL decoding, all the little conversions you need five times a day but do not want to write a script for.
+**Boop** for quick text transformations, JWT decoding, JSON formatting, all the little conversions you need from time to time, but do not want to write a script for.
 
 **OrbStack** as a Docker Desktop replacement. Lighter, faster, less intrusive.
 
@@ -67,7 +69,7 @@ I experimented with **VibeKanban** and **Paperclip** for managing multiple AI ag
 
 I have been using this multi-window approach extensively for mypy migration, dependency updates, and setting up Renovate on more than 10 microservices, and it has held up well enough that I stopped looking for something more sophisticated.
 
-## The pattern
+## Conclusion
 
 The common thread: fast, focused, and out of the way. The tools that survived are not the most feature-rich or the most impressive, they are the ones that removed a specific friction point without introducing new ones.
 
