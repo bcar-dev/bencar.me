@@ -1,3 +1,8 @@
+import { cn } from '@/lib/utils';
+
+const BASE_CLASSES =
+    'hover:text-accent transition-all duration-500 ease-in-out inline-block hover:rotate-15';
+
 export default function SocialLink({
     href,
     'aria-label': ariaLabel,
@@ -15,7 +20,7 @@ export default function SocialLink({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={ariaLabel}
-            className={`hover:text-accent transition-all duration-500 ease-in-out inline-block hover:rotate-15 ${className || ''}`}
+            className={cn(BASE_CLASSES, className)}
         >
             {children}
         </a>
