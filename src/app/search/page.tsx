@@ -78,6 +78,23 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
     );
 }
 
+/**
+ * Render a Pagefind excerpt. Pagefind's excerpts only contain literal
+ * <mark>...</mark> wrapping matched words; the rest is plain text already
+ * decoded by Pagefind's HTML extractor, so we can split on the tags and
+ * render React nodes without dangerouslySetInnerHTML.
+ */
+function ExcerptText({ excerpt }: { excerpt: string }) {
+    const parts = excerpt.split(/<\/?mark>/);
+    return (
+        <>
+            {parts.map((part, i) =>
+                i % 2 === 1 ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+            )}
+        </>
+    );
+}
+
 function adaptResult(data: PagefindData): SearchResult {
     const meta = data.meta ?? {};
     const tags = data.filters?.tag ?? [];
@@ -321,8 +338,9 @@ function SearchContent() {
                                             <p
                                                 key={j}
                                                 className="text-foreground/80 leading-relaxed text-sm [&_mark]:bg-yellow-200 [&_mark]:dark:bg-yellow-700/60 [&_mark]:px-0.5 [&_mark]:rounded-sm"
-                                                dangerouslySetInnerHTML={{ __html: snippet }}
-                                            />
+                                            >
+                                                <ExcerptText excerpt={snippet} />
+                                            </p>
                                         ))}
                                     </div>
                                 ))}

@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
-function buildJsonLd(post: NonNullable<ReturnType<typeof getPostBySlug>>) {
-    return {
+function buildJsonLd(post: NonNullable<ReturnType<typeof getPostBySlug>>): string {
+    const data = {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: post.frontmatter.title,
@@ -41,6 +41,8 @@ function buildJsonLd(post: NonNullable<ReturnType<typeof getPostBySlug>>) {
             url: siteConfig.url,
         },
     };
+    // Escape `<` so a string containing `</script>` can't close the tag early.
+    return JSON.stringify(data).replace(/</g, '\\u003c');
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -54,10 +56,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     return (
         <article className="py-8 w-full" style={{ viewTransitionName: 'post-content' }}>
             <ReadingProgress />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(post)) }}
-            />
+            <script type="application/ld+json">{buildJsonLd(post)}</script>
             <header className="mb-8" id="top">
                 <h1
                     className="text-3xl font-bold tracking-tight sm:text-4xl text-accent w-fit"
