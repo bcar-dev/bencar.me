@@ -1,7 +1,12 @@
 'use client';
 
 import { FiList } from 'react-icons/fi';
-import { type TocEntry } from '@/lib/rehype-toc';
+
+export interface TocEntry {
+    text: string;
+    slug: string;
+    level: number;
+}
 
 export interface TableOfContentsProps {
     headings: ReadonlyArray<TocEntry>;

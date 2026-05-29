@@ -97,33 +97,19 @@ describe('MarkdownRenderer', () => {
         expect(result).toBeNull();
     });
 
-    it('returns null if table-of-contents data is invalid', () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
-        const renderToc = (markdownComponents as any)['table-of-contents'] as (props: any) => any;
-        const result = renderToc({ 'data-headings': '{ invalid json' });
-        expect(result).toBeNull();
-        consoleSpy.mockRestore();
+    it('renders a TableOfContents when headings prop is provided', () => {
+        const { container } = render(
+            <MarkdownRenderer
+                content="## Section\nBody"
+                headings={[{ text: 'Section', slug: 'section', index: 0, level: 2 }]}
+            />
+        );
+        expect(container.querySelector('aside')).toBeInTheDocument();
+        expect(screen.getByText('Contents')).toBeInTheDocument();
     });
 
-    it.skipIf(typeof navigator !== 'undefined' && !navigator.userAgent.includes('jsdom'))(
-        'returns null and does not log if table-of-contents data is invalid in production',
-        () => {
-            const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
-            vi.stubEnv('NODE_ENV', 'production');
-            const renderToc = (markdownComponents as any)['table-of-contents'] as (
-                props: any
-            ) => any;
-            const result = renderToc({ 'data-headings': '{ invalid json' });
-            expect(result).toBeNull();
-            expect(consoleSpy).not.toHaveBeenCalled();
-            vi.unstubAllEnvs();
-            consoleSpy.mockRestore();
-        }
-    );
-
-    it('handles missing data-headings gracefully', () => {
-        const renderToc = (markdownComponents as any)['table-of-contents'] as (props: any) => any;
-        const result = renderToc({});
-        expect(result).toBeTruthy();
+    it('does not render a TableOfContents when headings are empty', () => {
+        const { container } = render(<MarkdownRenderer content="No headings" headings={[]} />);
+        expect(container.querySelector('aside')).not.toBeInTheDocument();
     });
 });

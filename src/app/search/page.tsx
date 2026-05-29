@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiSearch, FiX } from 'react-icons/fi';
@@ -9,115 +9,245 @@ import Tag from '@/components/ui/Tag';
 import PostTitle from '@/components/ui/PostTitle';
 import PostMeta from '@/components/ui/PostMeta';
 import { useDebounce } from '@/hooks/useDebounce';
-import { siteConfig } from '@/config/site';
+import { escapeRegex } from '@/lib/utils';
+
+const MIN_QUERY_LENGTH = 2;
+const PAGE_SIZE = 10;
+
+interface PagefindAnchor {
+    element: string;
+    id: string;
+    text?: string;
+    location?: number;
+}
+
+interface PagefindSubResult {
+    title: string;
+    url: string;
+    excerpt: string;
+    anchor?: PagefindAnchor;
+}
+
+interface PagefindData {
+    url: string;
+    excerpt: string;
+    meta: Record<string, string | undefined>;
+    filters: Record<string, string[] | undefined>;
+    sub_results: PagefindSubResult[];
+}
+
+interface PagefindResultStub {
+    id: string;
+    data: () => Promise<PagefindData>;
+}
+
+interface PagefindApi {
+    search: (q: string) => Promise<{ results: PagefindResultStub[] }>;
+    preload?: (term: string, options?: Record<string, unknown>) => Promise<void>;
+    options?: (opts: Record<string, unknown>) => Promise<void>;
+}
+
+let pagefindPromise: Promise<PagefindApi> | null = null;
+
+function loadPagefind(): Promise<PagefindApi> {
+    if (typeof window === 'undefined') {
+        return Promise.reject(new Error('pagefind is browser only'));
+    }
+    if (!pagefindPromise) {
+        // The URL must be opaque to the bundler so it resolves at runtime from /public.
+        const url = '/pagefind/pagefind.js';
+        pagefindPromise = import(
+            /* webpackIgnore: true */ /* turbopackIgnore: true */ /* @vite-ignore */ url
+        ).then(async (mod: PagefindApi) => {
+            await mod.options?.({ excerptLength: 30 });
+            return mod;
+        });
+    }
+    return pagefindPromise;
+}
 
 function HighlightMatch({ text, query }: { text: string; query: string }) {
-    if (!query || query.length < 2) return <>{text}</>;
-
-    // Split text by query (case-insensitive)
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(${escapedQuery})`, 'gi');
-    const parts = text.split(regex);
-
+    if (!query || query.length < MIN_QUERY_LENGTH) return <>{text}</>;
+    const parts = text.split(new RegExp(`(${escapeRegex(query)})`, 'gi'));
     return (
         <>
             {parts.map((part, i) =>
-                regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+                i % 2 === 1 ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
             )}
         </>
     );
+}
+
+/**
+ * Render a Pagefind excerpt. Pagefind's excerpts only contain literal
+ * <mark>...</mark> wrapping matched words; the rest is plain text already
+ * decoded by Pagefind's HTML extractor, so we can split on the tags and
+ * render React nodes without dangerouslySetInnerHTML.
+ */
+function ExcerptText({ excerpt }: { excerpt: string }) {
+    const parts = excerpt.split(/<\/?mark>/);
+    return (
+        <>
+            {parts.map((part, i) =>
+                i % 2 === 1 ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+            )}
+        </>
+    );
+}
+
+function adaptResult(data: PagefindData): SearchResult {
+    const meta = data.meta ?? {};
+    const tags = data.filters?.tag ?? [];
+    const slug = meta.slug ?? data.url.split('/').filter(Boolean).pop() ?? '';
+
+    const matches = data.sub_results.map((sub) => ({
+        heading: sub.anchor
+            ? { text: sub.title, slug: sub.anchor.id }
+            : null,
+        snippets: [sub.excerpt],
+    }));
+
+    return {
+        slug,
+        title: meta.title ?? slug,
+        date: meta.date ?? '',
+        readingTime: meta.readingTime ?? '',
+        tags,
+        matches,
+    };
+}
+
+type SearchStatus = 'idle' | 'loading' | 'loadingMore' | 'ready' | 'error';
+
+interface SearchState {
+    status: SearchStatus;
+    results: SearchResult[];
+    count: number;
+    /** Remaining stubs we haven't materialised yet. */
+    pending: PagefindResultStub[];
+}
+
+const INITIAL_STATE: SearchState = {
+    status: 'idle',
+    results: [],
+    count: 0,
+    pending: [],
+};
+
+async function materializeBatch(stubs: PagefindResultStub[]): Promise<SearchResult[]> {
+    const datas = await Promise.all(stubs.map((s) => s.data()));
+    return datas.map(adaptResult);
 }
 
 function SearchContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [query, setQuery] = useState(searchParams.get('q') ?? '');
+    const [query, setQuery] = useState(() => searchParams.get('q') ?? '');
     const debouncedQuery = useDebounce(query, 300);
+    const [state, setState] = useState<SearchState>(INITIAL_STATE);
+    const requestIdRef = useRef(0);
 
-    const [results, setResults] = useState<SearchResult[]>([]);
-    const [count, setCount] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [loadingMore, setLoadingMore] = useState(false);
-    const [searched, setSearched] = useState(false);
-    const [nextOffset, setNextOffset] = useState(0);
-
-    const doSearch = useCallback(
-        async (q: string, currentOffset: number = 0, append: boolean = false) => {
-            if (q.length < 2) {
-                setResults([]);
-                setCount(0);
-                setSearched(false);
-                setNextOffset(0);
-                return;
-            }
-
-            if (append) {
-                setLoadingMore(true);
-            } else {
-                setLoading(true);
-            }
-
-            try {
-                const res = await fetch(
-                    `/api/search?q=${encodeURIComponent(q)}&offset=${currentOffset}&occurrenceLimit=${siteConfig.search.occurrenceLimit}`
-                );
-                const data = await res.json();
-
-                if (append) {
-                    setResults((prev) => [...prev, ...data.results]);
-                } else {
-                    setResults(data.results);
-                }
-
-                setCount(data.count);
-                setNextOffset(data.nextOffset);
-                setSearched(true);
-            } catch {
-                if (!append) {
-                    setResults([]);
-                    setCount(0);
-                }
-            } finally {
-                setLoading(false);
-                setLoadingMore(false);
-            }
-        },
-        []
-    );
-
-    // Perform search when debounced query changes
-    useEffect(() => {
-        doSearch(debouncedQuery, 0, false);
-
-        // Update URL
-        if (debouncedQuery.length >= 2) {
-            router.replace(`/search?q=${encodeURIComponent(debouncedQuery)}`, { scroll: false });
-        } else {
-            router.replace('/search', { scroll: false });
+    const runSearch = useCallback(async (q: string) => {
+        const requestId = ++requestIdRef.current;
+        if (q.length < MIN_QUERY_LENGTH) {
+            setState(INITIAL_STATE);
+            return;
         }
-    }, [debouncedQuery, doSearch, router]);
 
-    const handleLoadMore = () => {
-        if (nextOffset === -1) return;
-        doSearch(debouncedQuery, nextOffset, true);
+        setState({ status: 'loading', results: [], count: 0, pending: [] });
+
+        try {
+            const pagefind = await loadPagefind();
+            const { results } = await pagefind.search(q);
+            if (requestId !== requestIdRef.current) return;
+
+            const initial = results.slice(0, PAGE_SIZE);
+            const pending = results.slice(PAGE_SIZE);
+            const materialised = await materializeBatch(initial);
+            if (requestId !== requestIdRef.current) return;
+
+            setState({
+                status: 'ready',
+                results: materialised,
+                count: results.length,
+                pending,
+            });
+        } catch (err) {
+            if (requestId !== requestIdRef.current) return;
+            console.error('search failed', err);
+            setState({ status: 'error', results: [], count: 0, pending: [] });
+        }
+    }, []);
+
+    // Warm Pagefind (dynamic import + WASM + meta fetch) as soon as the page mounts,
+    // so the first search after typing isn't paying that cost.
+    useEffect(() => {
+        loadPagefind().catch((err) => console.warn('pagefind warm failed', err));
+    }, []);
+
+    // Pre-fetch the index chunks needed for the current query while the user is still typing,
+    // so the actual search after the debounce is near-instant.
+    useEffect(() => {
+        if (query.length < MIN_QUERY_LENGTH) return;
+        loadPagefind()
+            .then((pf) => pf.preload?.(query))
+            .catch(() => {});
+    }, [query]);
+
+    useEffect(() => {
+        runSearch(debouncedQuery);
+    }, [debouncedQuery, runSearch]);
+
+    useEffect(() => {
+        const target =
+            debouncedQuery.length >= MIN_QUERY_LENGTH
+                ? `/search?q=${encodeURIComponent(debouncedQuery)}`
+                : '/search';
+        router.replace(target, { scroll: false });
+    }, [debouncedQuery, router]);
+
+    const handleLoadMore = async () => {
+        if (state.pending.length === 0 || state.status === 'loadingMore') return;
+        const requestId = ++requestIdRef.current;
+        const nextStubs = state.pending.slice(0, PAGE_SIZE);
+        const rest = state.pending.slice(PAGE_SIZE);
+
+        setState((prev) => ({ ...prev, status: 'loadingMore' }));
+        try {
+            const more = await materializeBatch(nextStubs);
+            if (requestId !== requestIdRef.current) return;
+            setState((prev) => ({
+                status: 'ready',
+                results: [...prev.results, ...more],
+                count: prev.count,
+                pending: rest,
+            }));
+        } catch (err) {
+            if (requestId !== requestIdRef.current) return;
+            console.error('load more failed', err);
+            setState((prev) => ({ ...prev, status: 'ready' }));
+        }
     };
 
     const handleClear = () => {
         setQuery('');
-        setResults([]);
-        setCount(0);
-        setSearched(false);
-        setNextOffset(0);
-        router.replace('/search', { scroll: false });
+        setState(INITIAL_STATE);
     };
+
+    const isLoading = state.status === 'loading';
+    const isLoadingMore = state.status === 'loadingMore';
+    const showResults = state.status === 'ready' || state.status === 'loadingMore';
+    const showEmpty =
+        state.status === 'ready' &&
+        state.results.length === 0 &&
+        debouncedQuery.length >= MIN_QUERY_LENGTH;
 
     return (
         <div className="py-8 w-full">
             <h1 className="my-8 text-3xl font-bold tracking-wider sm:text-4xl">Search</h1>
             <p className="mb-6 italic text-foreground/80">Search any article ...</p>
 
-            {/* Search input */}
             <div className="relative w-full mb-8">
                 <label className="sr-only" htmlFor="search-input">
                     Search input
@@ -146,25 +276,26 @@ function SearchContent() {
                 )}
             </div>
 
-            {/* Result count */}
-            {searched && !loading && (
+            {showResults && (
                 <div className="mb-6 pb-4 border-b border-border text-sm text-foreground/75">
-                    {count} {count === 1 ? 'result' : 'results'} for{' '}
+                    {state.count} {state.count === 1 ? 'result' : 'results'} for{' '}
                     <span className="font-semibold text-foreground">{debouncedQuery}</span>
                 </div>
             )}
 
-            {/* Loading state */}
-            {loading && <div className="text-sm italic text-foreground/60">Searching...</div>}
+            {isLoading && <div className="text-sm italic text-foreground/60">Searching...</div>}
 
-            {/* Results */}
-            {!loading && searched && results.length === 0 && (
-                <p className="text-foreground/75 italic">No results found.</p>
+            {showEmpty && <p className="text-foreground/75 italic">No results found.</p>}
+
+            {state.status === 'error' && (
+                <p className="text-foreground/75 italic">
+                    Search is unavailable. Try again in a moment.
+                </p>
             )}
 
-            {!loading && results.length > 0 && (
+            {showResults && state.results.length > 0 && (
                 <ul className="space-y-6">
-                    {results.map((result) => (
+                    {state.results.map((result) => (
                         <li
                             key={result.slug}
                             className="group pb-6 border-b border-border/50 last:border-b-0"
@@ -208,10 +339,7 @@ function SearchContent() {
                                                 key={j}
                                                 className="text-foreground/80 leading-relaxed text-sm [&_mark]:bg-yellow-200 [&_mark]:dark:bg-yellow-700/60 [&_mark]:px-0.5 [&_mark]:rounded-sm"
                                             >
-                                                <HighlightMatch
-                                                    text={snippet}
-                                                    query={debouncedQuery}
-                                                />
+                                                <ExcerptText excerpt={snippet} />
                                             </p>
                                         ))}
                                     </div>
@@ -222,15 +350,14 @@ function SearchContent() {
                 </ul>
             )}
 
-            {/* Load More */}
-            {searched && !loading && nextOffset !== -1 && (
+            {showResults && state.pending.length > 0 && (
                 <div className="mt-12 flex justify-center">
                     <button
                         onClick={handleLoadMore}
-                        disabled={loadingMore}
+                        disabled={isLoadingMore}
                         className="px-6 py-2 rounded-md border border-border bg-background hover:bg-foreground/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                     >
-                        {loadingMore ? 'Loading...' : `Load more results`}
+                        {isLoadingMore ? 'Loading...' : 'Load more results'}
                     </button>
                 </div>
             )}

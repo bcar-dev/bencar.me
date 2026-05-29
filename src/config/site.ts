@@ -19,7 +19,4 @@ export const siteConfig = {
     pagination: {
         recentPostsCount: 10,
     },
-    search: {
-        occurrenceLimit: 100,
-    },
 };
