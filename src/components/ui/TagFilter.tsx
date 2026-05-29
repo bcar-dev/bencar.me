@@ -2,9 +2,7 @@
 
 import type { Post } from '@/types';
 import { FiX } from 'react-icons/fi';
-import Tag from '@/components/ui/Tag';
-import PostTitle from '@/components/ui/PostTitle';
-import PostMeta from '@/components/ui/PostMeta';
+import PostListItem from '@/components/ui/PostListItem';
 import { useTagFilter } from '@/hooks/useTagFilter';
 
 export default function TagFilter({ allTags, allPosts }: { allTags: string[]; allPosts: Post[] }) {
@@ -13,7 +11,6 @@ export default function TagFilter({ allTags, allPosts }: { allTags: string[]; al
 
     return (
         <div className="w-full">
-            {/* Tags Section */}
             <div className="mb-10">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold tracking-wide">Tags</h2>
@@ -55,10 +52,9 @@ export default function TagFilter({ allTags, allPosts }: { allTags: string[]; al
 
             <hr className="border-border opacity-50 my-8" />
 
-            {/* Filtered Posts Section */}
             <div>
                 <h2 className="text-2xl font-bold tracking-wide mb-6">
-                    {'Posts'}
+                    Posts
                     <span className="text-sm font-normal text-foreground/60 ml-2">
                         ({filteredPosts.length})
                     </span>
@@ -71,33 +67,16 @@ export default function TagFilter({ allTags, allPosts }: { allTags: string[]; al
                 ) : (
                     <ul className="space-y-6">
                         {filteredPosts.map((post) => (
-                            <li key={post.slug} className="group">
-                                <PostTitle
-                                    href={`/posts/${post.slug}`}
-                                    className="text-xl sm:text-2xl"
-                                >
-                                    {post.frontmatter.title}
-                                </PostTitle>
-                                <div className="mt-1 flex flex-wrap gap-2 items-center text-sm text-foreground/75 opacity-80">
-                                    <PostMeta
-                                        pubDatetime={post.frontmatter.pubDatetime}
-                                        readingTime={post.readingTime}
-                                    />
-                                    {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
-                                        <>
-                                            <span className="italic opacity-70">•</span>
-                                            <div className="flex flex-wrap gap-2 items-center">
-                                                {post.frontmatter.tags.map((tag) => (
-                                                    <Tag key={tag} tag={tag} />
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                                <p className="mt-3 text-foreground/80 leading-relaxed italic">
-                                    {post.frontmatter.description}
-                                </p>
-                            </li>
+                            <PostListItem
+                                key={post.slug}
+                                slug={post.slug}
+                                title={post.frontmatter.title}
+                                description={post.frontmatter.description}
+                                pubDatetime={post.frontmatter.pubDatetime}
+                                readingTime={post.readingTime}
+                                tags={post.frontmatter.tags}
+                                titleClassName="text-xl sm:text-2xl"
+                            />
                         ))}
                     </ul>
                 )}
