@@ -2,8 +2,7 @@ import { Link } from 'next-view-transitions';
 import { FiArrowRight } from 'react-icons/fi';
 import { getAllPosts } from '@/lib/posts';
 import { siteConfig } from '@/config/site';
-import PostMeta from '@/components/ui/PostMeta';
-import PostTitle from '@/components/ui/PostTitle';
+import PostListItem from '@/components/ui/PostListItem';
 
 export default function Home() {
     const recentPosts = getAllPosts().slice(0, siteConfig.pagination.recentPostsCount);
@@ -20,25 +19,15 @@ export default function Home() {
                 ) : (
                     <ul className="space-y-6">
                         {recentPosts.map((post) => (
-                            <li key={post.slug} className="group">
-                                <PostTitle
-                                    href={`/posts/${post.slug}`}
-                                    className="w-fit"
-                                    style={{ viewTransitionName: `title-${post.slug}` }}
-                                >
-                                    {post.frontmatter.title}
-                                </PostTitle>
-                                <div className="mt-1 flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80">
-                                    <PostMeta
-                                        pubDatetime={post.frontmatter.pubDatetime}
-                                        readingTime={post.readingTime}
-                                        className="mr-1"
-                                    />
-                                </div>
-                                <p className="mt-3 text-foreground/80 leading-relaxed italic">
-                                    {post.frontmatter.description}
-                                </p>
-                            </li>
+                            <PostListItem
+                                key={post.slug}
+                                slug={post.slug}
+                                title={post.frontmatter.title}
+                                description={post.frontmatter.description}
+                                pubDatetime={post.frontmatter.pubDatetime}
+                                readingTime={post.readingTime}
+                                titleStyle={{ viewTransitionName: `title-${post.slug}` }}
+                            />
                         ))}
                     </ul>
                 )}

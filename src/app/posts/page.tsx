@@ -1,9 +1,7 @@
 import { Link } from 'next-view-transitions';
 import Image from 'next/image';
 import { getPostsGroupedByDate } from '@/lib/posts';
-import Tag from '@/components/ui/Tag';
-import PostTitle from '@/components/ui/PostTitle';
-import PostMeta from '@/components/ui/PostMeta';
+import PostListItem from '@/components/ui/PostListItem';
 import { siteConfig } from '@/config/site';
 
 export const metadata = {
@@ -30,7 +28,6 @@ export default function Posts() {
 
                         return (
                             <section key={yearGroup.year} className="relative">
-                                {/* Year Header */}
                                 <h2 className="text-2xl sm:text-2xl font-extrabold mb-6 relative inline-block">
                                     {yearGroup.year}
                                     <sup className="text-base sm:text-lg font-medium text-foreground/50 ml-1 absolute top-1 -right-6">
@@ -42,7 +39,6 @@ export default function Posts() {
                                 <div className="space-y-10">
                                     {yearGroup.months.map((monthGroup) => (
                                         <div key={monthGroup.month}>
-                                            {/* Month Header */}
                                             <h3 className="text-2xl font-bold mb-6 text-foreground/80 flex items-center">
                                                 {monthGroup.month}
                                                 <sup className="text-sm font-medium text-foreground/50 ml-1">
@@ -52,44 +48,19 @@ export default function Posts() {
 
                                             <ul className="space-y-10">
                                                 {monthGroup.posts.map((post) => (
-                                                    <li key={post.slug} className="group">
-                                                        <div className="flex flex-col mb-4">
-                                                            <PostTitle
-                                                                href={`/posts/${post.slug}`}
-                                                                className="mb-2 w-fit"
-                                                                style={{
-                                                                    viewTransitionName: `title-${post.slug}`,
-                                                                }}
-                                                            >
-                                                                {post.frontmatter.title}
-                                                            </PostTitle>
-                                                            <div className="flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80">
-                                                                <PostMeta
-                                                                    pubDatetime={
-                                                                        post.frontmatter.pubDatetime
-                                                                    }
-                                                                    readingTime={post.readingTime}
-                                                                    className="mr-1"
-                                                                />
-                                                                {post.frontmatter.tags &&
-                                                                    post.frontmatter.tags.length >
-                                                                        0 && (
-                                                                        <div className="flex flex-wrap gap-2 items-center">
-                                                                            {post.frontmatter.tags.map(
-                                                                                (tag) => (
-                                                                                    <Tag
-                                                                                        key={tag}
-                                                                                        tag={tag}
-                                                                                    />
-                                                                                )
-                                                                            )}
-                                                                        </div>
-                                                                    )}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex flex-col sm:flex-row gap-6 items-start">
-                                                            {/* Hero Image Thumbnail (Hidden on Mobile) */}
+                                                    <PostListItem
+                                                        key={post.slug}
+                                                        slug={post.slug}
+                                                        title={post.frontmatter.title}
+                                                        pubDatetime={post.frontmatter.pubDatetime}
+                                                        readingTime={post.readingTime}
+                                                        tags={post.frontmatter.tags}
+                                                        titleClassName="mb-2 w-fit"
+                                                        titleStyle={{
+                                                            viewTransitionName: `title-${post.slug}`,
+                                                        }}
+                                                    >
+                                                        <div className="flex flex-col sm:flex-row gap-6 items-start mt-4">
                                                             {post.frontmatter.heroImage && (
                                                                 <div className="hidden sm:block shrink-0 pt-1">
                                                                     <Link
@@ -114,15 +85,13 @@ export default function Posts() {
                                                                     </Link>
                                                                 </div>
                                                             )}
-
-                                                            {/* Post Description */}
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-lg text-foreground/80 leading-relaxed line-clamp-3">
                                                                     {post.frontmatter.description}
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                    </li>
+                                                    </PostListItem>
                                                 ))}
                                             </ul>
                                         </div>
