@@ -1,31 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTheme as useNextTheme } from 'next-themes';
+
+const TOGGLE_ANIMATION_MS = 500;
 
 export function useTheme() {
     const { theme, setTheme, systemTheme } = useNextTheme();
     const [isAnimating, setIsAnimating] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Prevent hydration mismatch
     useEffect(() => {
         setMounted(true);
+        return () => {
+            if (timerRef.current !== null) clearTimeout(timerRef.current);
+        };
     }, []);
 
     const toggleTheme = () => {
         if (isAnimating) return;
-
         setIsAnimating(true);
 
         const currentTheme = theme === 'system' ? systemTheme : theme;
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 
-        setTimeout(() => setIsAnimating(false), 500);
+        if (timerRef.current !== null) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+            setIsAnimating(false);
+            timerRef.current = null;
+        }, TOGGLE_ANIMATION_MS);
     };
 
     return {
         isAnimating,
         toggleTheme,
-        // Expose current active theme safely for UI if needed
         isDark: mounted && (theme === 'dark' || (theme === 'system' && systemTheme === 'dark')),
     };
 }

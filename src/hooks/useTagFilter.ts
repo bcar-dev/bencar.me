@@ -1,22 +1,16 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import type { Post } from '@/types';
 
 export function useTagFilter(allTags: string[], allPosts: Post[]) {
     const searchParams = useSearchParams();
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const initialised = useRef(false);
 
-    // Pre-select tag from ?tag= query param on first render
-    useEffect(() => {
-        if (initialised.current) return;
-        initialised.current = true;
-
+    // Initial selection comes from ?tag= on first render only; later changes
+    // to the query param do not retroactively select tags.
+    const [selectedTags, setSelectedTags] = useState<string[]>(() => {
         const tag = searchParams.get('tag');
-        if (tag && allTags.includes(tag)) {
-            setSelectedTags([tag]);
-        }
-    }, [searchParams, allTags]);
+        return tag && allTags.includes(tag) ? [tag] : [];
+    });
 
     const toggleTag = (tag: string) => {
         setSelectedTags((prev) =>
@@ -24,26 +18,24 @@ export function useTagFilter(allTags: string[], allPosts: Post[]) {
         );
     };
 
-    const clearTags = () => {
-        setSelectedTags([]);
-    };
+    const clearTags = () => setSelectedTags([]);
 
-    // Count posts per tag, sort tags by count descending (Memoized)
     const { tagCounts, sortedTags } = useMemo(() => {
         const counts: Record<string, number> = {};
-        for (const tag of allTags) {
-            counts[tag] = allPosts.filter((post) => post.frontmatter.tags?.includes(tag)).length;
+        for (const tag of allTags) counts[tag] = 0;
+        for (const post of allPosts) {
+            for (const tag of post.frontmatter.tags) {
+                if (tag in counts) counts[tag]++;
+            }
         }
         const sorted = [...allTags].sort((a, b) => counts[b] - counts[a]);
         return { tagCounts: counts, sortedTags: sorted };
     }, [allTags, allPosts]);
 
-    // Filter posts - show posts that match ALL selected tags (Memoized)
     const filteredPosts = useMemo(() => {
         if (selectedTags.length === 0) return allPosts;
-
         return allPosts.filter((post) =>
-            selectedTags.every((st) => post.frontmatter.tags?.includes(st))
+            selectedTags.every((st) => post.frontmatter.tags.includes(st))
         );
     }, [selectedTags, allPosts]);
 
