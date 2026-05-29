@@ -5,23 +5,22 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import Image from 'next/image';
 import TableOfContents from '@/components/ui/TableOfContents';
-import rehypeToc from '@/lib/rehype-toc';
+import type { PostHeading } from '@/types';
+
+type HeadingProps = ClassAttributes<HTMLHeadingElement> &
+    HTMLAttributes<HTMLHeadingElement> & { node?: unknown };
+
+const headingRenderer = (Tag: 'h2' | 'h3') => {
+    const Component = ({ node: _node, ...props }: HeadingProps) => (
+        <Tag className="group relative scroll-mt-20" {...props} />
+    );
+    Component.displayName = `MarkdownHeading(${Tag})`;
+    return Component;
+};
 
 export const markdownComponents: Components = {
-    h2: ({
-        node: _node,
-        ...props
-    }: ClassAttributes<HTMLHeadingElement> &
-        HTMLAttributes<HTMLHeadingElement> & { node?: unknown }) => (
-        <h2 className="group relative scroll-mt-20" {...props} />
-    ),
-    h3: ({
-        node: _node,
-        ...props
-    }: ClassAttributes<HTMLHeadingElement> &
-        HTMLAttributes<HTMLHeadingElement> & { node?: unknown }) => (
-        <h3 className="group relative scroll-mt-20" {...props} />
-    ),
+    h2: headingRenderer('h2'),
+    h3: headingRenderer('h3'),
     img: (image: ImgHTMLAttributes<HTMLImageElement> & { node?: unknown }) => {
         if (!image.src || typeof image.src !== 'string') return null;
         return (
@@ -38,28 +37,24 @@ export const markdownComponents: Components = {
             </span>
         );
     },
-    // @ts-expect-error custom tag injected by rehype-toc
-    'table-of-contents': (props: { 'data-headings'?: string; node?: unknown }) => {
-        try {
-            const headings = JSON.parse(props['data-headings'] || '[]');
-            return <TableOfContents headings={headings} />;
-        } catch (e) {
-            if (process.env.NODE_ENV !== 'production') {
-                console.error('Failed to parse table-of-contents data:', e);
-            }
-            return null;
-        }
-    },
 };
 
-export default function MarkdownRenderer({ content }: { content: string }) {
+interface MarkdownRendererProps {
+    content: string;
+    headings?: PostHeading[];
+}
+
+export default function MarkdownRenderer({ content, headings }: MarkdownRendererProps) {
+    const tocEntries =
+        headings?.map(({ text, slug, level }) => ({ text, slug, level })) ?? [];
+
     return (
         <div className="prose prose-lg dark:prose-invert max-w-none markdown-content">
+            {tocEntries.length > 0 && <TableOfContents headings={tocEntries} />}
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[
                     rehypeSlug,
-                    rehypeToc as import('unified').Plugin,
                     [
                         rehypeAutolinkHeadings,
                         {

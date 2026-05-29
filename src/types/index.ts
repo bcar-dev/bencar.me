@@ -8,11 +8,20 @@ export interface PostFrontmatter {
     heroImageAlt?: string;
 }
 
+export interface PostHeading {
+    text: string;
+    slug: string;
+    index: number;
+    level: 2 | 3;
+}
+
 export interface Post {
     slug: string;
     frontmatter: PostFrontmatter;
     content: string;
     readingTime: string;
+    headings: PostHeading[];
+    formattedDate: string;
 }
 
 export interface SearchHeading {

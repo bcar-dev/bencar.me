@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { getAllPosts, getPostBySlug, getPostWithNeighbors } from '@/lib/posts';
 import Tag from '@/components/ui/Tag';
 import PostMeta from '@/components/ui/PostMeta';
 import BackToTop from '@/components/ui/BackToTop';
@@ -25,20 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const allPosts = getAllPosts();
-    const postIndex = allPosts.findIndex((p) => p.slug === slug);
-    const post = allPosts[postIndex];
-
-    if (!post) {
-        notFound();
-    }
-
-    const prevPost = postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
-    const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
-
-    const jsonLd = {
+function buildJsonLd(post: NonNullable<ReturnType<typeof getPostBySlug>>) {
+    return {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: post.frontmatter.title,
@@ -53,13 +41,22 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             url: siteConfig.url,
         },
     };
+}
+
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const { post, prev, next } = getPostWithNeighbors(slug);
+
+    if (!post) {
+        notFound();
+    }
 
     return (
         <article className="py-8 w-full" style={{ viewTransitionName: 'post-content' }}>
             <ReadingProgress />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(post)) }}
             />
             <header className="mb-8" id="top">
                 <h1
@@ -74,7 +71,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                         readingTime={post.readingTime}
                     />
                 </div>
-                {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                {post.frontmatter.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                         {post.frontmatter.tags.map((tag) => (
                             <Tag key={tag} tag={tag} />
@@ -98,7 +95,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             <hr className="border-border opacity-50 mb-8" />
 
-            <MarkdownRenderer content={post.content} />
+            <MarkdownRenderer content={post.content} headings={post.headings} />
 
             <div className="mt-12 flex flex-col space-y-8">
                 <div className="flex justify-center">
@@ -107,7 +104,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
                 <hr className="border-border opacity-50" />
 
-                <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+                <PostNavigation prevPost={prev} nextPost={next} />
             </div>
         </article>
     );
