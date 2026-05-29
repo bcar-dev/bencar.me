@@ -16,6 +16,8 @@
 
 @layer base {
     :root {
+        color-scheme: light dark;
+
         --background: #fdfdfd;
         --foreground: #282728;
         --accent: #006cac;
