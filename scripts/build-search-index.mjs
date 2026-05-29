@@ -67,28 +67,37 @@ async function renderPost(filePath) {
     const slug = path.basename(filePath, '.md');
     const title = data.title ?? slug;
     const description = data.description ?? '';
-    const pubDatetime = data.pubDatetime ?? '';
+    // gray-matter parses YAML timestamps into Date objects; serialise to ISO 8601
+    // so the browser's Date constructor accepts it on the client.
+    const pubDatetime =
+        data.pubDatetime instanceof Date
+            ? data.pubDatetime.toISOString()
+            : String(data.pubDatetime ?? '');
     const tags = Array.isArray(data.tags) ? data.tags : [];
     const readingTime = readingTimeFn(content).text;
 
     const bodyHtml = String(await processor.process(content));
-    const tagFilters = tags.map((t) => `<meta data-pagefind-filter="tag" content="${escapeHtml(t)}">`).join('');
-    const tagMeta = tags.map((t) => `<meta data-pagefind-meta="tag[]" content="${escapeHtml(t)}">`).join('');
+    // Pagefind only reads data-pagefind-meta / data-pagefind-filter from
+    // elements inside the indexed body, so emit them as hidden spans there.
+    const metaSpans = [
+        `<span hidden data-pagefind-meta="title:${escapeHtml(title)}"></span>`,
+        `<span hidden data-pagefind-meta="slug:${escapeHtml(slug)}"></span>`,
+        `<span hidden data-pagefind-meta="description:${escapeHtml(description)}"></span>`,
+        `<span hidden data-pagefind-meta="date:${escapeHtml(pubDatetime)}"></span>`,
+        `<span hidden data-pagefind-meta="readingTime:${escapeHtml(readingTime)}"></span>`,
+        ...tags.map(
+            (t) => `<span hidden data-pagefind-filter="tag:${escapeHtml(t)}"></span>`
+        ),
+    ].join('');
 
     const html = `<!doctype html>
 <html lang="en">
 <head>
     <title>${escapeHtml(title)}</title>
-    <meta data-pagefind-meta="title" content="${escapeHtml(title)}">
-    <meta data-pagefind-meta="slug" content="${escapeHtml(slug)}">
-    <meta data-pagefind-meta="description" content="${escapeHtml(description)}">
-    <meta data-pagefind-meta="date" content="${escapeHtml(pubDatetime)}">
-    <meta data-pagefind-meta="readingTime" content="${escapeHtml(readingTime)}">
-    ${tagMeta}
-    ${tagFilters}
 </head>
 <body>
     <main data-pagefind-body>
+        ${metaSpans}
         <h1>${escapeHtml(title)}</h1>
         ${description ? `<p>${escapeHtml(description)}</p>` : ''}
         ${bodyHtml}
