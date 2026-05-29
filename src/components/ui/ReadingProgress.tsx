@@ -1,43 +1,53 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function ReadingProgress() {
-    const [progress, setProgress] = useState(0);
+    const barRef = useRef<HTMLDivElement>(null);
+    const tickingRef = useRef(false);
 
     useEffect(() => {
-        const updateProgress = () => {
+        const apply = () => {
+            tickingRef.current = false;
+            const bar = barRef.current;
+            if (!bar) return;
+
             const documentHeight = document.documentElement.scrollHeight;
-            const scrollPosition = window.scrollY;
             const windowHeight = window.innerHeight;
-
             const scrollableHeight = documentHeight - windowHeight;
+            const raw =
+                scrollableHeight <= 0 ? 0 : (window.scrollY / scrollableHeight) * 100;
+            const percentage = Math.min(100, Math.max(0, raw));
 
-            if (scrollableHeight <= 0) {
-                setProgress(0);
-                return;
-            }
-
-            const percentage = (scrollPosition / scrollableHeight) * 100;
-            setProgress(Math.min(100, Math.max(0, percentage)));
+            bar.style.width = `${percentage}%`;
+            bar.setAttribute('aria-valuenow', String(Math.round(percentage)));
         };
 
-        window.addEventListener('scroll', updateProgress, { passive: true });
+        const onScroll = () => {
+            if (tickingRef.current) return;
+            tickingRef.current = true;
+            const raf =
+                typeof window.requestAnimationFrame === 'function'
+                    ? window.requestAnimationFrame
+                    : (cb: FrameRequestCallback) => window.setTimeout(() => cb(0), 16);
+            raf(apply);
+        };
 
-        // Initial setup
-        updateProgress();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        apply();
 
-        return () => window.removeEventListener('scroll', updateProgress);
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     return (
         <div
-            className="fixed top-0 left-0 h-2 bg-accent z-50 transition-all duration-150 ease-out"
-            style={{ width: `${progress}%` }}
+            ref={barRef}
+            className="fixed top-0 left-0 h-2 bg-accent z-50 transition-[width] duration-150 ease-out"
+            style={{ width: '0%' }}
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-valuenow={progress}
+            aria-valuenow={0}
         />
     );
 }
