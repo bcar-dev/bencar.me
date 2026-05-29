@@ -17,6 +17,9 @@
         "test:coverage": "vitest run --coverage",
         "test:browser": "vitest --browser.headless=true"
     },
+    "overrides": {
+        "postcss": "$postcss"
+    },
     "dependencies": {
         "github-slugger": "^2.0.0",
         "gray-matter": "^4.0.3",
