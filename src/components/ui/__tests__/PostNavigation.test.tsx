@@ -18,6 +18,8 @@ describe('PostNavigation', () => {
         },
         content: '',
         readingTime: '0 min',
+        headings: [],
+        formattedDate: '',
     };
     const nextPost = {
         slug: 'next',
@@ -29,6 +31,8 @@ describe('PostNavigation', () => {
         },
         content: '',
         readingTime: '0 min',
+        headings: [],
+        formattedDate: '',
     };
 
     it('renders null if no posts provided', () => {
