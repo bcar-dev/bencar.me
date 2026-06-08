@@ -1,5 +1,6 @@
 # build output
-.next/
+dist/
+.astro/
 tsconfig.tsbuildinfo
 public/pagefind/
 
@@ -53,4 +54,4 @@ CLAUDE.md
 
 # testing
 coverage/
-__screenshots__/
+__screenshots__/dist/
