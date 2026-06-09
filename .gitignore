@@ -51,6 +51,7 @@ src/content/temp/
 # agent markdown files
 AGENTS.md
 CLAUDE.md
+.claude
 
 # testing
 coverage/
