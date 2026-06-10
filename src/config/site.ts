@@ -6,7 +6,6 @@ export const siteConfig = {
         name: 'Benjamin Carlier',
         pseudonym: 'Ben',
         bio: 'Backend, data and AI.\nLong rides and bikepacking in between.',
-        avatar: '/profile.jpg',
     },
     links: {
         github: 'https://github.com/bcar-dev',

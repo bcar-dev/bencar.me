@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
-import { cache } from 'react';
 import type { Post, PostFrontmatter, PostHeading, MonthGroup, YearGroup } from '@/types';
 import GithubSlugger from 'github-slugger';
 import { remark } from 'remark';
@@ -73,10 +72,17 @@ function parsePost(filePath: string): Post {
     const raw = fs.readFileSync(filePath, 'utf-8');
     const { data, content } = matter(raw);
     const rawFrontmatter = data as Partial<PostFrontmatter>;
+    // gray-matter parses YAML timestamps into Date objects; normalise to an ISO
+    // string so PostFrontmatter.pubDatetime is genuinely a string (and a valid
+    // <time datetime> value).
+    const pubDatetime =
+        data.pubDatetime instanceof Date
+            ? data.pubDatetime.toISOString()
+            : (data.pubDatetime ?? '');
     const frontmatter: PostFrontmatter = {
         title: rawFrontmatter.title ?? '',
         description: rawFrontmatter.description ?? '',
-        pubDatetime: rawFrontmatter.pubDatetime ?? '',
+        pubDatetime,
         tags: rawFrontmatter.tags ?? [],
         draft: rawFrontmatter.draft,
         heroImage: rawFrontmatter.heroImage,
@@ -95,8 +101,11 @@ function parsePost(filePath: string): Post {
 
 /**
  * Get all published posts, sorted by date (newest first).
+ *
+ * Called at build time only (static generation), so re-reading the handful of
+ * markdown files per page is cheap and no request-level cache is needed.
  */
-export const getAllPosts = cache((): Post[] => {
+export function getAllPosts(): Post[] {
     const files = getMdFiles(CONTENT_DIR);
 
     return files
@@ -107,7 +116,7 @@ export const getAllPosts = cache((): Post[] => {
                 new Date(b.frontmatter.pubDatetime).getTime() -
                 new Date(a.frontmatter.pubDatetime).getTime()
         );
-});
+}
 
 /**
  * Get a single post by its slug.
