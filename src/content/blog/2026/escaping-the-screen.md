@@ -27,9 +27,7 @@ I quite enjoyed the Combe of Lourmarin, the climb to Buoux and the roads from La
 
 The south Luberon won't satisfy if you're after epic Alpine gradients or KOM segments. The climbs are short, the roads mostly rolling, the altitudes modest. It did not bother me at all, I'm not particularly designed for steep slopes :).
 
-![Combe de Lourmarin](/assets/img/2026/escaping-the-screen/combe-lourmarin.jpeg)
-
-
+![Combe de Lourmarin](../../../assets/img/2026/escaping-the-screen/combe-lourmarin.jpeg)
 
 ## What the bike gives back
 
@@ -37,7 +35,7 @@ There is something about the rhythm of pedalling that reorganises the mind in a 
 
 This is what developers miss when they stay too long at the screen: the brain needs input that has nothing to do with code. New landscapes, new sensations, new physical challenges. And when you give some time to your brain, it often comes back to the hard problems refreshed, with a different angle.
 
-![View from Lacoste ](/assets/img/2026/escaping-the-screen/valley-view-from-lacoste.jpeg)
+![View from Lacoste ](../../../assets/img/2026/escaping-the-screen/valley-view-from-lacoste.jpeg)
 
 ## Closing the laptop, opening the map
 
@@ -49,8 +47,6 @@ The code will still be there on Monday. The bugs too, probably. But you'll come 
 
 One last recommendation if you like hiking, go and do the Saint-Victoire ascent, it's beautiful up there.
 
-![View from top of the Saint-Victoire](/assets/img/2026/escaping-the-screen/view-top-sainte-victoire.jpeg)
+![View from top of the Saint-Victoire](../../../assets/img/2026/escaping-the-screen/view-top-sainte-victoire.jpeg)
 
-
-![Prieuré Saint-Victoire](/assets/img/2026/escaping-the-screen/prieure-sainte-victoire.jpeg)
-
+![Prieuré Saint-Victoire](../../../assets/img/2026/escaping-the-screen/prieure-sainte-victoire.jpeg)

@@ -4,7 +4,7 @@ description: 'An honest look at my daily tech stack: the editors, CLI tools, plu
 pubDatetime: 2026-05-14T14:00:00+02:00
 tags: ['development', 'workflow', 'tools']
 heroImage: '/assets/img/2026/the-tools-i-actually-use/developer-at-night.png'
-heroImageAlt: "A generated, nime-style illustration of a hoodie-wearing developer coding late at night in a cozy modern workspace, seated in a Herman Miller Aeron chair facing dual monitors filled with code. The room is softly lit with warm ambient lighting, plants, posters, and tech accessories, while a nighttime city skyline glows through the window, creating a cinematic and focused atmosphere."
+heroImageAlt: 'A generated, nime-style illustration of a hoodie-wearing developer coding late at night in a cozy modern workspace, seated in a Herman Miller Aeron chair facing dual monitors filled with code. The room is softly lit with warm ambient lighting, plants, posters, and tech accessories, while a nighttime city skyline glows through the window, creating a cinematic and focused atmosphere.'
 ---
 
 There is a difference between the tools you try and the tools you keep. Over the past year or so, I have tried dozens of editors, terminals, CLI utilities, and AI plugins, and most of them did not survive more than a week or two of real use. What follows is the set that did. It's the things I reach for every day without thinking about it, which is probably the best metric for whether a tool actually works.
@@ -51,7 +51,7 @@ The default Unix utilities are fine, but there are replacements that are just be
 - **Caveman** - compresses agent output by roughly 75%, making responses faster and cheaper without losing technical accuracy
 - **Colgrep** - semantic code search that combines regex filtering with AI-powered ranking, right from the terminal
 
-With Caveman, Colgrep, Serena, and rtk combined, I never find myself reaching Anthropic's Max $100/month plan limit. I would strongly recommend these tools to anyone looking to get more out of their token budget. 
+With Caveman, Colgrep, Serena, and rtk combined, I never find myself reaching Anthropic's Max $100/month plan limit. I would strongly recommend these tools to anyone looking to get more out of their token budget.
 
 I sometimes manually prompt Caveman off for when I need to understand something, the brevity of the response is sometimes not very helpful for when learning new stuff.
 
