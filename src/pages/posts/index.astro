@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostListItem from '@/components/ui/PostListItem.astro';
+import { getPostsGroupedByDate } from '@/lib/posts';
+import { getHeroImage } from '@/lib/heroImages';
+import { siteConfig } from '@/config/site';
+
+const groupedPosts = getPostsGroupedByDate();
+
+// Resolve optimizable hero images once, keyed by slug.
+const heroes = new Map(
+    groupedPosts
+        .flatMap((y) => y.months.flatMap((m) => m.posts))
+        .map((p) => [p.slug, getHeroImage(p.frontmatter.heroImage)] as const)
+);
+---
+
+<BaseLayout title="All Posts" description={`All blog posts on ${siteConfig.name}`}>
+    <div class="py-8 w-full">
+        <h1 class="my-8 text-2xl font-bold tracking-wider sm:text-4xl">All Posts</h1>
+
+        {
+            groupedPosts.length === 0 ? (
+                <p class="text-foreground/75 italic">No posts yet. Stay tuned!</p>
+            ) : (
+                <div class="space-y-12">
+                    {groupedPosts.map((yearGroup) => {
+                        const totalPostsInYear = yearGroup.months.reduce(
+                            (acc, current) => acc + current.posts.length,
+                            0
+                        );
+                        return (
+                            <section class="relative">
+                                <h2 class="text-2xl sm:text-2xl font-extrabold mb-6 relative inline-block">
+                                    {yearGroup.year}
+                                    <sup class="text-base sm:text-lg font-medium text-foreground/50 ml-1 absolute top-1 -right-6">
+                                        {totalPostsInYear}
+                                    </sup>
+                                </h2>
+                                <hr class="w-full border-t-2 border-border/50 mb-8" />
+
+                                <div class="space-y-10">
+                                    {yearGroup.months.map((monthGroup) => (
+                                        <div>
+                                            <h3 class="text-2xl font-bold mb-6 text-foreground/80 flex items-center">
+                                                {monthGroup.month}
+                                                <sup class="text-sm font-medium text-foreground/50 ml-1">
+                                                    {monthGroup.posts.length}
+                                                </sup>
+                                            </h3>
+
+                                            <ul class="space-y-10">
+                                                {monthGroup.posts.map((post) => {
+                                                    const hero = heroes.get(post.slug);
+                                                    return (
+                                                        <PostListItem
+                                                            slug={post.slug}
+                                                            title={post.frontmatter.title}
+                                                            pubDatetime={
+                                                                post.frontmatter.pubDatetime
+                                                            }
+                                                            readingTime={post.readingTime}
+                                                            tags={post.frontmatter.tags}
+                                                            titleClassName="mb-2 w-fit"
+                                                        >
+                                                            <div class="flex flex-col sm:flex-row gap-6 items-start mt-4">
+                                                                {hero && (
+                                                                    <div class="hidden sm:block shrink-0 pt-1">
+                                                                        <a
+                                                                            href={`/posts/${post.slug}`}
+                                                                            class="block overflow-hidden rounded-lg border border-accent/20 group-hover:border-accent/50 transition-colors bg-foreground/5"
+                                                                        >
+                                                                            <Image
+                                                                                src={hero}
+                                                                                alt={
+                                                                                    post.frontmatter
+                                                                                        .heroImageAlt ||
+                                                                                    post.frontmatter
+                                                                                        .title
+                                                                                }
+                                                                                width={168}
+                                                                                height={112}
+                                                                                densities={[1, 2]}
+                                                                                class="w-42 h-28 object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                            />
+                                                                        </a>
+                                                                    </div>
+                                                                )}
+                                                                <div class="flex-1 min-w-0">
+                                                                    <p class="text-lg text-foreground/80 leading-relaxed line-clamp-3">
+                                                                        {
+                                                                            post.frontmatter
+                                                                                .description
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </PostListItem>
+                                                    );
+                                                })}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })}
+                </div>
+            )
+        }
+    </div>
+</BaseLayout>
