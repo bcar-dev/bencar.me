@@ -7,6 +7,10 @@
         @apply mt-8 mb-3 text-xl font-bold text-foreground;
     }
 
+    .markdown-content :is(h2, h3) {
+        scroll-margin-top: 5rem;
+    }
+
     .markdown-content p {
         @apply text-foreground/90 leading-relaxed;
     }
