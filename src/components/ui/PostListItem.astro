@@ -1,0 +1,56 @@
+---
+import PostMeta from '@/components/ui/PostMeta.vue';
+import PostTitle from '@/components/ui/PostTitle.astro';
+import Tag from '@/components/ui/Tag.vue';
+
+interface Props {
+    slug: string;
+    title: string;
+    description?: string;
+    pubDatetime: string;
+    readingTime: string;
+    tags?: string[];
+    titleClassName?: string;
+}
+
+const {
+    slug,
+    title,
+    description,
+    pubDatetime,
+    readingTime,
+    tags = [],
+    titleClassName = 'w-fit',
+} = Astro.props;
+
+// When a parent passes slot content (e.g. hero image + description on the
+// posts page) render that; otherwise fall back to the plain description.
+const hasSlot = Astro.slots.has('default');
+---
+
+<li class="group">
+    <PostTitle href={`/posts/${slug}`} class={titleClassName} transitionName={`title-${slug}`}>
+        {title}
+    </PostTitle>
+    <div
+        class="mt-1 flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80"
+    >
+        <PostMeta pubDatetime={pubDatetime} readingTime={readingTime} class="mr-1" />
+        {
+            tags.length > 0 && (
+                <div class="flex flex-wrap gap-2 items-center">
+                    {tags.map((tag) => (
+                        <Tag tag={tag} />
+                    ))}
+                </div>
+            )
+        }
+    </div>
+    {
+        hasSlot ? (
+            <slot />
+        ) : description ? (
+            <p class="mt-3 text-foreground/80 leading-relaxed italic">{description}</p>
+        ) : null
+    }
+</li>

@@ -1,0 +1,22 @@
+---
+interface Props {
+    href: string;
+    'aria-label': string;
+    class?: string;
+}
+
+const { href, 'aria-label': ariaLabel, class: className } = Astro.props;
+
+const BASE_CLASSES =
+    'hover:text-accent transition-all duration-500 ease-in-out inline-block hover:rotate-15';
+---
+
+<a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={ariaLabel}
+    class:list={[BASE_CLASSES, className]}
+>
+    <slot />
+</a>

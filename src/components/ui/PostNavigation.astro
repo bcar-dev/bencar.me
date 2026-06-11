@@ -1,0 +1,82 @@
+---
+import type { Post } from '@/types';
+
+interface Props {
+    prevPost: Post | null;
+    nextPost: Post | null;
+}
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+{
+    (prevPost || nextPost) && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            {prevPost ? (
+                <a
+                    href={`/posts/${prevPost.slug}`}
+                    class="group flex flex-col justify-center rounded-2xl border border-transparent p-4 transition-colors hover:border-accent/50 hover:bg-accent/5 overflow-hidden min-w-0 h-full"
+                >
+                    <span class="text-xs text-foreground/50 mb-1 flex items-center gap-1 uppercase tracking-wider font-semibold shrink-0">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="size-4 transition-transform group-hover:-translate-x-1"
+                        >
+                            <path d="m15 18-6-6 6-6" />
+                        </svg>
+                        Previous Post
+                    </span>
+                    <span
+                        transition:name={`title-${prevPost.slug}`}
+                        class="text-accent text-lg font-bold group-hover:underline transition-all break-words max-w-full"
+                    >
+                        {prevPost.frontmatter.title}
+                    </span>
+                </a>
+            ) : (
+                <div />
+            )}
+
+            {nextPost ? (
+                <a
+                    href={`/posts/${nextPost.slug}`}
+                    class="group flex flex-col justify-center items-end text-right rounded-2xl border border-transparent p-4 transition-colors hover:border-accent/50 hover:bg-accent/5 overflow-hidden min-w-0 h-full"
+                >
+                    <span class="text-xs text-foreground/50 mb-1 flex items-center gap-1 uppercase tracking-wider font-semibold shrink-0">
+                        Next Post
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="size-4 transition-transform group-hover:translate-x-1"
+                        >
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </span>
+                    <span
+                        transition:name={`title-${nextPost.slug}`}
+                        class="text-accent text-lg font-bold group-hover:underline transition-all break-words max-w-full"
+                    >
+                        {nextPost.frontmatter.title}
+                    </span>
+                </a>
+            ) : (
+                <div />
+            )}
+        </div>
+    )
+}
