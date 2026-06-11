@@ -1,0 +1,36 @@
+---
+import { siteConfig } from '@/config/site';
+import SocialLink from '@/components/ui/SocialLink.astro';
+import Icon from '@/components/Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-auto">
+    <hr class="border-border/50" />
+    <div
+        class="py-8 flex flex-col sm:flex-row items-center justify-between text-sm text-foreground/75"
+    >
+        <div class="mb-4 sm:mb-0 flex items-center space-x-2">
+            <span>© {year}</span>
+            <span>•</span>
+            <a href="/" class="hover:text-accent font-medium">{siteConfig.author.name}</a>
+        </div>
+        <div class="flex space-x-4">
+            <a
+                href="/tags"
+                aria-label="Tags"
+                class="flex items-center gap-1.5 hover:text-accent transition-colors"
+            >
+                <Icon name="tags" size={20} />
+                <span class="text-sm">Tags</span>
+            </a>
+            <SocialLink href={siteConfig.links.github} aria-label="GitHub">
+                <Icon name="github" size={20} />
+            </SocialLink>
+            <SocialLink href={siteConfig.links.linkedin} aria-label="LinkedIn">
+                <Icon name="linkedin" size={20} />
+            </SocialLink>
+        </div>
+    </div>
+</footer>

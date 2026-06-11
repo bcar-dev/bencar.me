@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import { siteConfig } from '@/config/site';
+import SocialLink from '@/components/ui/SocialLink.astro';
+import Icon from '@/components/Icon.astro';
+import Navigation from '@/components/layout/Navigation.vue';
+import avatar from '@/assets/profile.jpg';
+---
+
+<header>
+    <div class="w-full">
+        <div class="flex flex-col border-b border-border/50">
+            <div
+                class="relative flex w-full items-center justify-between bg-background py-4 sm:pt-6 sm:pb-4"
+            >
+                <div class="py-1 whitespace-nowrap flex items-center gap-3 w-fit">
+                    <a
+                        href="/"
+                        class="text-2xl leading-7 font-bold hover:text-accent transition-colors"
+                    >
+                        {siteConfig.name}
+                    </a>
+                    <a href="/about" class="flex-shrink-0">
+                        <Image
+                            src={avatar}
+                            alt={siteConfig.author.name}
+                            width={32}
+                            height={32}
+                            densities={[1, 2]}
+                            loading="eager"
+                            class="rounded-full object-cover hover:opacity-80 transition-opacity w-8 h-8"
+                        />
+                    </a>
+                </div>
+                <Navigation client:idle currentPath={Astro.url.pathname} />
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col">
+        <div class="flex w-full items-center justify-between pt-3 pb-4 sm:pb-3">
+            <p class="text-foreground/80 font-mono text-sm leading-tight whitespace-pre-line">
+                {siteConfig.author.bio}
+            </p>
+            <div class="flex gap-2 items-center text-foreground/75 shrink-0 sm:-mr-2">
+                <SocialLink href={siteConfig.links.github} aria-label="GitHub" class="p-2">
+                    <Icon name="github" class="w-5 h-5" />
+                </SocialLink>
+                <SocialLink href={siteConfig.links.linkedin} aria-label="LinkedIn" class="p-2">
+                    <Icon name="linkedin" class="w-5 h-5" />
+                </SocialLink>
+            </div>
+        </div>
+    </div>
+</header>
