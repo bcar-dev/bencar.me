@@ -1,21 +1,36 @@
 # Benjamin Carlier's Personal Website
 
-This is the source code for my personal website, built with [Next.js](https://nextjs.org) and deployed on [Vercel](https://vercel.com).
+This is the source code for my personal website, built with [Astro](https://astro.build) and [Vue](https://vuejs.org) islands, and deployed on [Vercel](https://vercel.com).
 
 ## About
 
 I'm Benjamin Carlier, a backend developer and bike enthusiast.
 
+## Stack
+
+- **Astro** for static, content-first pages (zero JS by default)
+- **Vue** islands for the interactive pieces (theme toggle, nav, tag filter, search)
+- **Tailwind CSS v4** via the `@tailwindcss/vite` plugin
+- **Pagefind** for static full-text search
+- **Vitest** for tests, **pnpm** as the package manager
+
 ## Commands
 
-| Command          | Action                                      |
-| :--------------- | :------------------------------------------ |
-| `npm install`    | Installs dependencies                       |
-| `npm run dev`    | Starts local dev server at `localhost:3000` |
-| `npm run build`  | Build the production site to `.next/`       |
-| `npm run lint`   | Runs the linter (eslint)                    |
-| `npm run format` | Runs the formatter (prettier)               |
-| `npm run test`   | Runs the tests (vitest)                     |
+All commands are run from the root of the project:
+
+| Command             | Action                                          |
+| :------------------ | :---------------------------------------------- |
+| `pnpm install`      | Installs dependencies                           |
+| `pnpm dev`          | Starts local dev server at `localhost:4321`     |
+| `pnpm build`        | Builds the production site to `dist/`           |
+| `pnpm preview`      | Previews the production build locally           |
+| `pnpm build:search` | Rebuilds the Pagefind index (`public/pagefind`) |
+| `pnpm check`        | Type-checks the project (`astro check`)         |
+| `pnpm lint`         | Runs the linter (eslint)                        |
+| `pnpm format`       | Runs the formatter (prettier)                   |
+| `pnpm test`         | Runs the tests (vitest)                         |
+
+The search index is rebuilt automatically before `dev` and during `build` (via an Astro build hook that writes it into `dist/pagefind`).
 
 ## Deployment
 
