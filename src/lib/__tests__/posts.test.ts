@@ -9,10 +9,6 @@ import {
 } from '../posts';
 import fs from 'fs';
 
-vi.mock('react', () => ({
-    cache: vi.fn((fn) => fn),
-}));
-
 vi.mock('remark', async (importOriginal) => {
     const mod = await importOriginal<typeof import('remark')>();
     return {
@@ -142,6 +138,13 @@ describe('filesystem dependent functions', () => {
             expect(Array.isArray(posts[0].headings)).toBe(true);
         });
 
+        it('normalises YAML Date timestamps to an ISO string', () => {
+            // gray-matter parses `pubDatetime: 2026-02-01` into a Date.
+            const posts = getAllPosts();
+            expect(typeof posts[0].frontmatter.pubDatetime).toBe('string');
+            expect(posts[0].frontmatter.pubDatetime).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+        });
+
         it('normalises missing tags to []', () => {
             vi.mocked(fs.readFileSync).mockReturnValue(
                 '---\ntitle: NoTags\ndescription: d\npubDatetime: 2026-01-01\n---\nbody'
@@ -167,6 +170,19 @@ describe('filesystem dependent functions', () => {
             vi.mocked(fs.existsSync).mockReturnValue(false);
             getAllPosts();
         });
+
+        it('defaults missing frontmatter fields and leaves formattedDate empty', () => {
+            vi.mocked(fs.readFileSync).mockReturnValue('---\ndraft: false\n---\nbody only');
+            vi.mocked(fs.readdirSync).mockReturnValue([
+                { name: 'bare.md', isDirectory: () => false },
+            ] as any);
+            const posts = getAllPosts();
+            expect(posts).toHaveLength(1);
+            expect(posts[0].frontmatter.title).toBe('');
+            expect(posts[0].frontmatter.description).toBe('');
+            expect(posts[0].frontmatter.pubDatetime).toBe('');
+            expect(posts[0].formattedDate).toBe('');
+        });
     });
 
     describe('getPostBySlug', () => {
@@ -187,6 +203,13 @@ describe('filesystem dependent functions', () => {
             expect(post?.slug).toBe('post2');
             expect(prev?.slug).toBe('post1');
             expect(next).toBeNull();
+        });
+
+        it('returns null prev for the oldest post', () => {
+            const { post, prev, next } = getPostWithNeighbors('post1');
+            expect(post?.slug).toBe('post1');
+            expect(prev).toBeNull();
+            expect(next?.slug).toBe('post2');
         });
 
         it('returns undefined post when slug is unknown', () => {
