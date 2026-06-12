@@ -6,5 +6,7 @@
     "printWidth": 100,
     "bracketSpacing": true,
     "endOfLine": "lf",
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "plugins": ["prettier-plugin-astro"],
+    "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }]
 }

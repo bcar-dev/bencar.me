@@ -3,12 +3,14 @@
  * Build the Pagefind search index for the blog.
  *
  * Reads markdown posts from src/content/blog, renders them to HTML, and feeds
- * them into Pagefind's Node API. The resulting chunked index is written to
- * public/pagefind/ so Next.js serves it as a static asset.
+ * them into Pagefind's Node API. Exposes `buildSearchIndex(outputDir)` so the
+ * Astro build can write the index straight into `dist/pagefind` (via the
+ * astro:build:done hook in astro.config.mjs), and runs as a CLI writing to
+ * `public/pagefind` for the dev server (`pnpm run build:search`).
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import matter from 'gray-matter';
 import readingTimeFn from 'reading-time';
@@ -23,7 +25,7 @@ import * as pagefind from 'pagefind';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(ROOT, 'src/content/blog');
-const OUTPUT_DIR = path.join(ROOT, 'public/pagefind');
+const DEFAULT_OUTPUT_DIR = path.join(ROOT, 'public/pagefind');
 
 const processor = unified()
     .use(remarkParse)
@@ -85,9 +87,7 @@ async function renderPost(filePath) {
         `<span hidden data-pagefind-meta="description:${escapeHtml(description)}"></span>`,
         `<span hidden data-pagefind-meta="date:${escapeHtml(pubDatetime)}"></span>`,
         `<span hidden data-pagefind-meta="readingTime:${escapeHtml(readingTime)}"></span>`,
-        ...tags.map(
-            (t) => `<span hidden data-pagefind-filter="tag:${escapeHtml(t)}"></span>`
-        ),
+        ...tags.map((t) => `<span hidden data-pagefind-filter="tag:${escapeHtml(t)}"></span>`),
     ].join('');
 
     const html = `<!doctype html>
@@ -108,8 +108,11 @@ async function renderPost(filePath) {
     return { url: `/posts/${slug}`, content: html };
 }
 
-async function main() {
-    await fs.rm(OUTPUT_DIR, { recursive: true, force: true });
+/**
+ * Build the Pagefind index and write its chunked output to `outputDir`.
+ */
+export async function buildSearchIndex(outputDir = DEFAULT_OUTPUT_DIR) {
+    await fs.rm(outputDir, { recursive: true, force: true });
 
     const { index, errors: createErrors } = await pagefind.createIndex({
         rootSelector: 'main',
@@ -117,8 +120,7 @@ async function main() {
         forceLanguage: 'en',
     });
     if (createErrors?.length) {
-        console.error('pagefind createIndex errors:', createErrors);
-        process.exit(1);
+        throw new Error(`pagefind createIndex errors: ${createErrors.join(', ')}`);
     }
 
     let count = 0;
@@ -127,23 +129,28 @@ async function main() {
         if (!doc) continue;
         const { errors } = await index.addHTMLFile(doc);
         if (errors?.length) {
-            console.error(`pagefind addHTMLFile errors for ${doc.url}:`, errors);
-            process.exit(1);
+            throw new Error(`pagefind addHTMLFile errors for ${doc.url}: ${errors.join(', ')}`);
         }
         count++;
     }
 
-    const { errors: writeErrors } = await index.writeFiles({ outputPath: OUTPUT_DIR });
+    const { errors: writeErrors } = await index.writeFiles({ outputPath: outputDir });
     if (writeErrors?.length) {
-        console.error('pagefind writeFiles errors:', writeErrors);
-        process.exit(1);
+        throw new Error(`pagefind writeFiles errors: ${writeErrors.join(', ')}`);
     }
     await pagefind.close();
 
-    console.log(`Indexed ${count} posts -> ${path.relative(ROOT, OUTPUT_DIR)}`);
+    return { count, outputDir };
 }
 
-main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-});
+// Run as a CLI (writes to public/pagefind for the dev server).
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+    buildSearchIndex()
+        .then(({ count, outputDir }) => {
+            console.log(`Indexed ${count} posts -> ${path.relative(ROOT, outputDir)}`);
+        })
+        .catch((err) => {
+            console.error(err);
+            process.exit(1);
+        });
+}

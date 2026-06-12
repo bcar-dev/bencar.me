@@ -1,0 +1,14 @@
+---
+import { ICONS, type IconName } from '@/lib/icons';
+
+interface Props {
+    name: IconName;
+    size?: number | string;
+    class?: string;
+}
+
+const { name, size = '1em', class: className } = Astro.props;
+const Glyph = ICONS[name];
+---
+
+<Glyph width={size} height={size} class={className} aria-hidden="true" />

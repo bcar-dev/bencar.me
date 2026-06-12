@@ -1,0 +1,28 @@
+---
+import { POST_TITLE_LINK_CLASS } from '@/lib/ui';
+
+interface Props {
+    href: string;
+    class?: string;
+    /** Shared view-transition name to morph this title into the post heading. */
+    transitionName?: string;
+}
+
+const { href, class: className, transitionName } = Astro.props;
+---
+
+{
+    transitionName ? (
+        <a
+            href={href}
+            transition:name={transitionName}
+            class:list={[POST_TITLE_LINK_CLASS, className]}
+        >
+            <slot />
+        </a>
+    ) : (
+        <a href={href} class:list={[POST_TITLE_LINK_CLASS, className]}>
+            <slot />
+        </a>
+    )
+}

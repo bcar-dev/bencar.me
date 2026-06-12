@@ -15,7 +15,7 @@ This post is about how to learn through playing and gaming.
 
 ## Why it actually works and the psychology behind it
 
-Research consistently shows gamification has a meaningful positive effect on learning outcomes. But the *why* is more interesting than the *what*.
+Research consistently shows gamification has a meaningful positive effect on learning outcomes. But the _why_ is more interesting than the _what_.
 
 The most compelling explanation comes from **Self-Determination Theory** (SDT), a 40-year body of research in developmental psychology. It argues that humans have an innate drive to grow - and that drive is powered by three psychological needs:
 
@@ -37,11 +37,11 @@ What I dit not know is that 42's gamification system **failed the first time**.
 
 On the first iteration in 2014, nearly half the cohort disengaged. The problem was something you often experience in restaurants: too much choice. Students quickly found themselves facing 50+ projects with no structure. Cognitive science is clear on this: above five to seven options, people stop feeling empowered and start feeling paralyzed.
 
-The fix was counterintuitive: *reduce* the freedom. 42 restructured around a **competence tree** - completing one project unlocks one to three next projects, gradually opening the full curriculum. It preserved autonomy while making the path legible. The 2015 cohort, starting with this redesign, was dramatically more engaged.
+The fix was counterintuitive: _reduce_ the freedom. 42 restructured around a **competence tree** - completing one project unlocks one to three next projects, gradually opening the full curriculum. It preserved autonomy while making the path legible. The 2015 cohort, starting with this redesign, was dramatically more engaged.
 
-Two other design choices stand out. 
+Two other design choices stand out.
 
-1. **Peer correction system**: students review each other's code to advance, which maps directly onto the "relatedness" need from SDT - and mirrors professional engineering practice so closely that graduates step into code review culture at their first job with near-zero adjustment. 
+1. **Peer correction system**: students review each other's code to advance, which maps directly onto the "relatedness" need from SDT - and mirrors professional engineering practice so closely that graduates step into code review culture at their first job with near-zero adjustment.
 
 2. **Self-imposed deadlines**: 42 doesn't impose deadlines, but lets students set their own. Research shows that a deadline you choose feels like an act of autonomy; one imposed on you feels like a constraint. That distinction changes everything about motivation.
 
@@ -51,7 +51,7 @@ You probably did not think about it, but GitHub is one of the most successful ga
 
 The **contribution graph** - that grid of green squares - is a streak counter and progress bar in one. When GitHub removed streak counters in 2016, researchers studying the change found that long-lasting streaks became significantly less common almost immediately. A small UI element had been shaping developer behavior more than anyone realized.
 
-In 2022, GitHub added personal achievement badges, displayed publicly on your profile. The design philosophy is deliberate: it doesn't rank you against other developers. It tracks *your* progress. That distinction - personal growth over competitive ranking - is exactly what SDT predicts should work. And it does, across experience levels, without making anyone feel publicly inadequate in the process.
+In 2022, GitHub added personal achievement badges, displayed publicly on your profile. The design philosophy is deliberate: it doesn't rank you against other developers. It tracks _your_ progress. That distinction - personal growth over competitive ranking - is exactly what SDT predicts should work. And it does, across experience levels, without making anyone feel publicly inadequate in the process.
 
 Platforms like CodinGame, Advent of Code, and Codewars have applied the same logic more explicitly, turning algorithm practice into puzzles, annual community events, and martial-arts-style ranking systems. Millions of developers engage with them voluntarily, in their spare time, to practice skills they could just as easily ignore.
 
@@ -59,4 +59,4 @@ Platforms like CodinGame, Advent of Code, and Codewars have applied the same log
 
 You don't need a new platform to start applying this. The principles are transferable to how you structure your own growth.
 
-**Start small: gamify your todo list.** It sounds almost trivially simple, but a task list with a daily completion counter, a streak indicator, or even just a satisfying visual checkbox does something real: it makes progress *visible*. That's the core of what gamification offers. Not complexity - legibility. When you can see that your effort is producing results, you come back tomorrow.
+**Start small: gamify your todo list.** It sounds almost trivially simple, but a task list with a daily completion counter, a streak indicator, or even just a satisfying visual checkbox does something real: it makes progress _visible_. That's the core of what gamification offers. Not complexity - legibility. When you can see that your effort is producing results, you come back tomorrow.

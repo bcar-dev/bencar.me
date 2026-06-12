@@ -1,0 +1,9 @@
+allowBuilds:
+    esbuild: true
+    sharp: true
+
+# Wait 10 days (in minutes) after a version is published before installing it,
+# to mitigate supply-chain attacks via freshly-published malicious releases.
+minimumReleaseAge: 14400
+# TODO: drop this once the migration deps have aged past the window.
+trustLockfile: true

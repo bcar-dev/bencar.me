@@ -1,0 +1,13 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SearchIsland from '@/components/ui/Search.vue';
+---
+
+<BaseLayout title="Search" description="Search articles on bencar.me">
+    <SearchIsland client:only="vue">
+        <div slot="fallback" class="w-full max-w-3xl px-4 py-8">
+            <h1 class="my-8 text-3xl font-bold tracking-wider sm:text-4xl">Search</h1>
+            <p class="mb-6 italic text-foreground/80">Loading...</p>
+        </div>
+    </SearchIsland>
+</BaseLayout>

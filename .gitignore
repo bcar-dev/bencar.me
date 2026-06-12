@@ -1,5 +1,6 @@
 # build output
-.next/
+dist/
+.astro/
 tsconfig.tsbuildinfo
 public/pagefind/
 
@@ -50,7 +51,8 @@ src/content/temp/
 # agent markdown files
 AGENTS.md
 CLAUDE.md
+.claude
 
 # testing
 coverage/
-__screenshots__/
+__screenshots__/dist/

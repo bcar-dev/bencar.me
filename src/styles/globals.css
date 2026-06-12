@@ -2,7 +2,6 @@
 @plugin "@tailwindcss/typography";
 
 @import '../styles/markdown.css';
-@import '../styles/transitions.css';
 
 @custom-variant dark (&:is(.dark *));
 

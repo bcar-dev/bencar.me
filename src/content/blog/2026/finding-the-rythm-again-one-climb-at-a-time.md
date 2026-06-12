@@ -7,8 +7,7 @@ heroImage: '/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cycling
 heroImageAlt: 'Gourdon, France, with cycling friends.'
 ---
 
-*There is a moment every cyclist knows. The one where you're clipping in, the morning air still cool on your face, and everything else in life temporarily disappears. Riding feels effortless, you're not gasping for breath the second you push a little harder, and you can slip into a flow state. That feeling is what we're chasing, but getting there isn't straightforward, and it takes real effort.*
-
+_There is a moment every cyclist knows. The one where you're clipping in, the morning air still cool on your face, and everything else in life temporarily disappears. Riding feels effortless, you're not gasping for breath the second you push a little harder, and you can slip into a flow state. That feeling is what we're chasing, but getting there isn't straightforward, and it takes real effort._
 
 ## Finding the motivation to ride
 
@@ -22,13 +21,13 @@ The goal is to eliminate as many friction points as possible the night before by
 
 The early morning ride is a different religion. The roads are empty, the light is golden, and you're back before the day has even begun. It feels like you've stolen something from time. Every cyclist knows how better it is when roads are almost empty of cars.
 
-The post-work ride is often the easiest one to skeep. You're tired, your brain is full from a day of work, and the sofa is *right there*. The key here is commitment, change into your kit the moment you get home. Once you're in bib shorts, you're committed. Nobody sits back down on the sofa in bib shorts.
+The post-work ride is often the easiest one to skeep. You're tired, your brain is full from a day of work, and the sofa is _right there_. The key here is commitment, change into your kit the moment you get home. Once you're in bib shorts, you're committed. Nobody sits back down on the sofa in bib shorts.
 
-![Backcountry road](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/backcountry-road.jpeg)
+![Backcountry road](../../../assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/backcountry-road.jpeg)
 
 ## Gym work: the underrated foundation
 
-Before your legs are ready for hard efforts on the bike, the gym can do a lot of the groundwork. 
+Before your legs are ready for hard efforts on the bike, the gym can do a lot of the groundwork.
 
 Cyclists often neglect strength training, which is a mistake, especially when returning from a break. If you are a tall guy like me and plan to go for some climbs, prepare your muscle before going for it. Talking from experience, when the gravity pulls you back so hard and your muscles struggle with the gradient, it's not a good feeling.
 
@@ -36,9 +35,9 @@ Two sessions a week in the first month will pay dividends the rest of the season
 
 ## Riding with friends
 
-![The beautiful cote d'Azur](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-1.jpeg)
+![The beautiful cote d'Azur](../../../assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-1.jpeg)
 
-Even though I'm not personally a huge fan of group rides, because I like to have only wind in front of me and find my own rythm, pushing pedals at my own pace, I have to admit that they are a great way to stay motivated and to discover new places. 
+Even though I'm not personally a huge fan of group rides, because I like to have only wind in front of me and find my own rythm, pushing pedals at my own pace, I have to admit that they are a great way to stay motivated and to discover new places.
 
 There is no better motivator than a group ride on the calendar. You won't bail, people are expecting you to show up.
 
@@ -54,6 +53,6 @@ The rides have been hard enough to remind me why I started cycling in the first 
 
 This is what riding with friends gives you: not just kilometres, but memories attached to those kilometres. Landscapes you'll associate with a conversation, a climb, a shared struggle or a moment of unexpected beauty after a turn.
 
-*Currently riding in Grasse, France. Not coming back before next week.*
+_Currently riding in Grasse, France. Not coming back before next week._
 
-![Last one for the road](/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-2.jpeg)
+![Last one for the road](../../../assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cote-azur-2.jpeg)

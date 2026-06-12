@@ -1,0 +1,83 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { siteConfig } from '@/config/site';
+import '@/styles/globals.css';
+
+interface Props {
+    /** Page title without the site suffix. Omit on the home page. */
+    title?: string;
+    description?: string;
+    ogType?: 'website' | 'article';
+    image?: string;
+}
+
+const { title, description = siteConfig.description, ogType = 'website', image } = Astro.props;
+
+const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
+const ogImage = image ? new URL(image, siteConfig.url).href : undefined;
+---
+
+<!doctype html>
+<html lang="en" data-scroll-behavior="smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content={Astro.generator} />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="canonical" href={canonical} />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content={siteConfig.author.name} />
+        <meta name="robots" content="index, follow" />
+
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:site_name" content={siteConfig.name} />
+        <meta property="og:locale" content="en_US" />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+        {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+        <ClientRouter />
+
+        {
+            /* No-flash theme: set the `dark` class from localStorage / system preference
+            before paint, and re-apply it after each view-transition swap. */
+        }
+        <script is:inline>
+            (function () {
+                function applyTheme() {
+                    const stored = localStorage.getItem('theme');
+                    const theme =
+                        stored ??
+                        (window.matchMedia('(prefers-color-scheme: dark)').matches
+                            ? 'dark'
+                            : 'light');
+                    document.documentElement.classList.toggle('dark', theme === 'dark');
+                }
+                applyTheme();
+                document.addEventListener('astro:after-swap', applyTheme);
+            })();
+        </script>
+    </head>
+    <body class="flex min-h-screen flex-col bg-background font-mono text-foreground">
+        <div class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-4">
+            <Header />
+            <main class="flex w-full flex-1 flex-col items-center">
+                <slot />
+            </main>
+            <Footer />
+        </div>
+    </body>
+</html>
