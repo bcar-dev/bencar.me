@@ -2,7 +2,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { loadRenderers } from 'astro:container';
-import { getContainerRenderer } from '@astrojs/vue';
+import { getContainerRenderer } from '@astrojs/vue/container-renderer';
 import Header from '../Header.astro';
 import { siteConfig } from '@/config/site';
 
