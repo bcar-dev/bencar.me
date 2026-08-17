@@ -2,6 +2,19 @@ allowBuilds:
     esbuild: true
     sharp: true
 
+# @vue/test-utils pins js-beautify@1.x, which drags in the deprecated glob@10.
+# js-beautify only uses glob in its CLI, never in the beautify API test-utils calls,
+# so forcing the current major is safe and silences the deprecation warning.
+overrides:
+    glob: ^13.0.6
+
+# @tailwindcss/typography declares `tailwindcss: ">=3.0.0 || >=4.0.0 || insiders"`.
+# `insiders` is not valid semver, so pnpm cannot parse the range and reports it as
+# unmet even though the installed 4.x satisfies it. Upstream issue, nothing to fix here.
+peerDependencyRules:
+    allowedVersions:
+        '@tailwindcss/typography>tailwindcss': '4'
+
 # Wait 10 days (in minutes) after a version is published before installing it,
 # to mitigate supply-chain attacks via freshly-published malicious releases.
 minimumReleaseAge: 14400
