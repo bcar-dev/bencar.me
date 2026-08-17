@@ -41,7 +41,7 @@ Even though I'm not personally a huge fan of group rides, because I like to have
 
 There is no better motivator than a group ride on the calendar. You won't bail, people are expecting you to show up.
 
-But beyond accountability, riding with others is something else entirely. It's a few hours where conversation flows easily (at the right pace), where the kilometers disappear, and where you see the world from a vantage point most people never get to.
+But beyond accountability, riding with others is something else entirely. It's a few hours where conversation flows easily (at the right pace), where the kilometres disappear, and where you see the world from a vantage point most people never get to.
 
 Solo, you tend to stick to what you know. With friends, the route becomes a negotiation, a discovery, an adventure. Someone always knows a road you've never ridden, a climb you'd never have found on your own or a descent that makes you grin for the rest of the day.
 
@@ -49,7 +49,7 @@ I'm writing this from Grasse, in the hills above the Côte d'Azur, where I've sp
 
 Grasse is a perfect start for the season with shorter climbs, beautiful landscapes and the possibility to go to the coast to enjoy the view of the sea. Even though I don't fall into the light climber category, I quite enjoy it as long as the gradient does not go above 12%.
 
-The rides have been hard enough to remind me why I started cycling in the first place. And every evening, there's the ritual of the group dinner, the replaying of the day's kilometers, the planning of tomorrow's route.
+The rides have been hard enough to remind me why I started cycling in the first place. And every evening, there's the ritual of the group dinner, the replaying of the day's kilometres, the planning of tomorrow's route.
 
 This is what riding with friends gives you: not just kilometres, but memories attached to those kilometres. Landscapes you'll associate with a conversation, a climb, a shared struggle or a moment of unexpected beauty after a turn.
 
