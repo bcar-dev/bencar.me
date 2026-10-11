@@ -50,7 +50,6 @@ function stub(opts: StubOpts & { metaUndefined?: boolean } = {}) {
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function pagefindWith(results: any[]) {
     return {
         search: vi.fn(async () => ({ results })),

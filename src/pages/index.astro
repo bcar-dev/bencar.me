@@ -15,36 +15,32 @@ const recentPosts = getAllPosts().slice(0, siteConfig.pagination.recentPostsCoun
             <h2 id="recent-posts-heading" class="text-2xl font-bold tracking-wide mb-6">
                 Recent Posts
             </h2>
-            {
-                recentPosts.length === 0 ? (
-                    <p class="text-foreground/75 italic">No posts yet. Stay tuned!</p>
-                ) : (
-                    <ul class="space-y-6">
-                        {recentPosts.map((post) => (
-                            <PostListItem
-                                slug={post.slug}
-                                title={post.frontmatter.title}
-                                description={post.frontmatter.description}
-                                pubDatetime={post.frontmatter.pubDatetime}
-                                readingTime={post.readingTime}
-                            />
-                        ))}
-                    </ul>
-                )
-            }
+            {recentPosts.length === 0 ? (
+                <p class="text-foreground/75 italic">No posts yet. Stay tuned!</p>
+            ) : (
+                <ul class="space-y-6">
+                    {recentPosts.map((post) => (
+                        <PostListItem
+                            slug={post.slug}
+                            title={post.frontmatter.title}
+                            description={post.frontmatter.description}
+                            pubDatetime={post.frontmatter.pubDatetime}
+                            readingTime={post.readingTime}
+                        />
+                    ))}
+                </ul>
+            )}
 
-            {
-                recentPosts.length > 0 && (
-                    <div class="mt-10 flex justify-center">
-                        <a
-                            href="/posts"
-                            class="hover:text-accent text-sm flex items-center transition-colors"
-                        >
-                            All Posts <Icon name="arrow-right" class="ml-1 w-4 h-4" />
-                        </a>
-                    </div>
-                )
-            }
+            {recentPosts.length > 0 && (
+                <div class="mt-10 flex justify-center">
+                    <a
+                        href="/posts"
+                        class="hover:text-accent text-sm flex items-center transition-colors"
+                    >
+                        All Posts <Icon name="arrow-right" class="ml-1 w-4 h-4" />
+                    </a>
+                </div>
+            )}
         </section>
     </div>
 </BaseLayout>

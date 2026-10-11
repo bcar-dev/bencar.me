@@ -11,18 +11,12 @@ interface Props {
 const { href, class: className, transitionName } = Astro.props;
 ---
 
-{
-    transitionName ? (
-        <a
-            href={href}
-            transition:name={transitionName}
-            class:list={[POST_TITLE_LINK_CLASS, className]}
-        >
-            <slot />
-        </a>
-    ) : (
-        <a href={href} class:list={[POST_TITLE_LINK_CLASS, className]}>
-            <slot />
-        </a>
-    )
-}
+{transitionName ? (
+    <a href={href} transition:name={transitionName} class:list={[POST_TITLE_LINK_CLASS, className]}>
+        <slot />
+    </a>
+) : (
+    <a href={href} class:list={[POST_TITLE_LINK_CLASS, className]}>
+        <slot />
+    </a>
+)}

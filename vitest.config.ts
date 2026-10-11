@@ -14,13 +14,14 @@ export default getViteConfig({
         environment: 'jsdom',
         globals: true,
         setupFiles: ['./src/test/setup.ts'],
-        include: ['src/**/*.{test,spec}.{ts,tsx}'],
+        include: ['src/**/*.{test,spec}.{ts,tsx}', 'scripts/**/*.{test,spec}.{ts,tsx}'],
         coverage: {
             provider: 'v8',
-            include: ['src/**/*.{ts,vue}'],
+            include: ['src/**/*.{ts,vue,astro}', 'scripts/**/*.mjs'],
             exclude: [
                 'src/**/*.{test,spec}.{ts,tsx}',
                 'src/**/__tests__/**',
+                'scripts/**/__tests__/**',
                 'src/test/**',
                 'src/types/**',
                 'src/content.config.ts',
@@ -31,10 +32,11 @@ export default getViteConfig({
                 'src/lib/pagefind.ts',
             ],
             reporter: ['text', 'text-summary'],
-            // 100% lines + functions. Statements/branches sit just below 100 due to
-            // defensive race guards in Search and Vue-compiler-generated template
-            // branches that v8 miscounts (and /* v8 ignore */ doesn't work in .vue).
-            thresholds: { lines: 100, functions: 100, statements: 95, branches: 90 },
+            // 100% lines + functions across .ts, .vue, .astro and the build script.
+            // Statements/branches sit just below 100 due to defensive race guards in
+            // Search and Vue-compiler-generated template branches that v8 miscounts
+            // (and /* v8 ignore */ doesn't work in .vue).
+            thresholds: { lines: 100, functions: 100, statements: 97, branches: 95 },
         },
     },
 });

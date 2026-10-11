@@ -34,7 +34,7 @@ const processor = unified()
     .use(rehypeSlug)
     .use(rehypeStringify);
 
-async function* walkMarkdown(dir) {
+export async function* walkMarkdown(dir) {
     let entries;
     try {
         entries = await fs.readdir(dir, { withFileTypes: true });
@@ -52,7 +52,7 @@ async function* walkMarkdown(dir) {
     }
 }
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
     return String(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -61,7 +61,7 @@ function escapeHtml(value) {
         .replace(/'/g, '&#39;');
 }
 
-async function renderPost(filePath) {
+export async function renderPost(filePath) {
     const raw = await fs.readFile(filePath, 'utf-8');
     const { data, content } = matter(raw);
     if (data.draft) return null;
@@ -144,6 +144,8 @@ export async function buildSearchIndex(outputDir = DEFAULT_OUTPUT_DIR) {
 }
 
 // Run as a CLI (writes to public/pagefind for the dev server).
+// Exercised by a subprocess test, which v8 can't instrument from this process.
+/* v8 ignore start */
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     buildSearchIndex()
         .then(({ count, outputDir }) => {
@@ -154,3 +156,4 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
             process.exit(1);
         });
 }
+/* v8 ignore stop */

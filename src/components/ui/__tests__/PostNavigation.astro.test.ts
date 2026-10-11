@@ -42,4 +42,22 @@ describe('PostNavigation.astro', () => {
         expect(html).toContain('Newer Post');
         expect(html).toContain('Next Post');
     });
+
+    it('renders only the previous link when there is no next post', async () => {
+        const html = await container.renderToString(PostNavigation, {
+            props: { prevPost: makePost('older', 'Older Post'), nextPost: null },
+        });
+        expect(html).toContain('href="/posts/older"');
+        expect(html).toContain('Previous Post');
+        expect(html).not.toContain('Next Post');
+    });
+
+    it('renders only the next link when there is no previous post', async () => {
+        const html = await container.renderToString(PostNavigation, {
+            props: { prevPost: null, nextPost: makePost('newer', 'Newer Post') },
+        });
+        expect(html).toContain('href="/posts/newer"');
+        expect(html).toContain('Next Post');
+        expect(html).not.toContain('Previous Post');
+    });
 });

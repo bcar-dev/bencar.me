@@ -51,10 +51,8 @@ const ogImage = image ? new URL(image, siteConfig.url).href : undefined;
 
         <ClientRouter />
 
-        {
-            /* No-flash theme: set the `dark` class from localStorage / system preference
-            before paint, and re-apply it after each view-transition swap. */
-        }
+        {/* No-flash theme: set the `dark` class from localStorage / system preference
+            before paint, and re-apply it after each view-transition swap. */}
         <script is:inline>
             (function () {
                 function applyTheme() {

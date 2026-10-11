@@ -32,25 +32,19 @@ const hasSlot = Astro.slots.has('default');
     <PostTitle href={`/posts/${slug}`} class={titleClassName} transitionName={`title-${slug}`}>
         {title}
     </PostTitle>
-    <div
-        class="mt-1 flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80"
-    >
+    <div class="mt-1 flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80">
         <PostMeta pubDatetime={pubDatetime} readingTime={readingTime} class="mr-1" />
-        {
-            tags.length > 0 && (
-                <div class="flex flex-wrap gap-2 items-center">
-                    {tags.map((tag) => (
-                        <Tag tag={tag} />
-                    ))}
-                </div>
-            )
-        }
+        {tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 items-center">
+                {tags.map((tag) => (
+                    <Tag tag={tag} />
+                ))}
+            </div>
+        )}
     </div>
-    {
-        hasSlot ? (
-            <slot />
-        ) : description ? (
-            <p class="mt-3 text-foreground/80 leading-relaxed italic">{description}</p>
-        ) : null
-    }
+    {hasSlot ? (
+        <slot />
+    ) : description ? (
+        <p class="mt-3 text-foreground/80 leading-relaxed italic">{description}</p>
+    ) : null}
 </li>
