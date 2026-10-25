@@ -7,6 +7,14 @@ allowBuilds:
 # so forcing the current major is safe and silences the deprecation warning.
 overrides:
     glob: ^13.0.6
+    # Security floors for transitive deps (see `pnpm audit`).
+    # undici: GHSA-xjj6-f33q-929c, GHSA-4qv8-2p9j-2685, GHSA-f72v-6w45-q472 (via astro>unifont).
+    undici: ^8.12.2
+    # fast-uri: GHSA-w74x-v6f9-j3xg, GHSA-wjr9-j795-jxcr and others (via @astrojs/check).
+    fast-uri: ^3.1.9
+    # @tailwindcss/typography pins postcss-selector-parser@6.0.10 exactly.
+    # GHSA-rj75-hqrm-r3gf is only fixed in 7.1.6+; typography's selector API usage is v7-compatible.
+    '@tailwindcss/typography>postcss-selector-parser': ^7.1.6
 
 # @tailwindcss/typography declares `tailwindcss: ">=3.0.0 || >=4.0.0 || insiders"`.
 # `insiders` is not valid semver, so pnpm cannot parse the range and reports it as
@@ -18,5 +26,8 @@ peerDependencyRules:
 # Wait 10 days (in minutes) after a version is published before installing it,
 # to mitigate supply-chain attacks via freshly-published malicious releases.
 minimumReleaseAge: 14400
+# Security fixes published inside the window. Remove once they have aged past it.
+minimumReleaseAgeExclude:
+    - fast-uri@3.1.9
 # TODO: drop this once the migration deps have aged past the window.
 trustLockfile: true
