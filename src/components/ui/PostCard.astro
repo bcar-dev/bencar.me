@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import PostMeta from '@/components/ui/PostMeta.vue';
+import { getHeroImage } from '@/lib/heroImages';
+import type { Post } from '@/types';
+
+interface Props {
+    post: Post;
+}
+
+const { post } = Astro.props;
+const hero = getHeroImage(post.frontmatter.heroImage);
+---
+
+<li>
+    <a href={`/posts/${post.slug}`} class="group flex flex-col gap-3">
+        <PostMeta
+            pubDatetime={post.frontmatter.pubDatetime}
+            readingTime={post.readingTime}
+            class="text-sm text-foreground/60"
+        />
+        <div class="aspect-square overflow-hidden rounded-lg border border-border bg-foreground/5">
+            {/* Decorative: the title below already names the link. */}
+            {hero && (
+                <Image
+                    src={hero}
+                    alt=""
+                    widths={[320, 640]}
+                    sizes="(min-width: 1232px) 288px, (min-width: 1024px) 24vw, (min-width: 640px) 48vw, 100vw"
+                    class="h-full w-full object-cover"
+                />
+            )}
+        </div>
+        <h3 class="text-lg leading-snug font-bold underline-offset-4 group-hover:underline">
+            {post.frontmatter.title}
+        </h3>
+    </a>
+</li>

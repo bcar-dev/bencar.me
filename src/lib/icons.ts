@@ -6,6 +6,7 @@ import Github from '~icons/bi/github';
 import Linkedin from '~icons/bi/linkedin';
 import Tags from '~icons/lucide/tags';
 import Calendar from '~icons/lucide/calendar';
+import ArrowLeft from '~icons/lucide/arrow-left';
 import ArrowRight from '~icons/lucide/arrow-right';
 import Menu from '~icons/lucide/menu';
 import X from '~icons/lucide/x';
@@ -18,6 +19,7 @@ export const ICONS = {
     linkedin: Linkedin,
     tags: Tags,
     calendar: Calendar,
+    'arrow-left': ArrowLeft,
     'arrow-right': ArrowRight,
     menu: Menu,
     x: X,
