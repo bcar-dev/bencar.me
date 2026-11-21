@@ -27,16 +27,13 @@ const { prevPost, nextPost } = Astro.props;
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="size-4 transition-transform group-hover:-translate-x-1"
+                        class="size-4"
                     >
                         <path d="m15 18-6-6 6-6" />
                     </svg>
                     Previous Post
                 </span>
-                <span
-                    transition:name={`title-${prevPost.slug}`}
-                    class="text-accent text-lg font-bold group-hover:underline transition-all break-words max-w-full"
-                >
+                <span class="text-foreground text-lg font-bold group-hover:underline break-words max-w-full">
                     {prevPost.frontmatter.title}
                 </span>
             </a>
@@ -61,15 +58,12 @@ const { prevPost, nextPost } = Astro.props;
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="size-4 transition-transform group-hover:translate-x-1"
+                        class="size-4"
                     >
                         <path d="m9 18 6-6-6-6" />
                     </svg>
                 </span>
-                <span
-                    transition:name={`title-${nextPost.slug}`}
-                    class="text-accent text-lg font-bold group-hover:underline transition-all break-words max-w-full"
-                >
+                <span class="text-foreground text-lg font-bold group-hover:underline break-words max-w-full">
                     {nextPost.frontmatter.title}
                 </span>
             </a>
