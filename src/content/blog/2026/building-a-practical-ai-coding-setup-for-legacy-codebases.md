@@ -3,8 +3,8 @@ title: 'Building a practical AI coding setup for legacy codebases'
 description: 'How I went from chasing over-engineered agentic workflows to a lightweight, practical AI setup that actually holds up on a messy, real-world codebase.'
 pubDatetime: 2026-02-28T12:30:00+01:00
 tags: ['development', 'ai', 'agents', 'workflow']
-heroImage: '/assets/img/2026/building-a-practical-ai-coding-setup-for-legacy-codebases/factory-library.png'
-heroImageAlt: 'A dark factory converted to a library, with books on the shelves and a computer terminal in the center.'
+heroImage: '/assets/img/2026/building-a-practical-ai-coding-setup-for-legacy-codebases/cover.jpg'
+heroImageAlt: 'Line drawing of a tangled machine of pipes and AI bots, simplified into a single desk with a laptop and an AI assistant.'
 ---
 
 For years, I thought I had my development setup figured out - the right editor, the right extensions, the right habits - and then agentic AI came along and quietly made everything I knew feel a little outdated, not in a dramatic way, but in the slow, creeping way where you realize the tools you ignored for months have become things you can no longer imagine working without.

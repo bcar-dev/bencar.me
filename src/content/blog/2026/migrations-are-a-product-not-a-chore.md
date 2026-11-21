@@ -3,8 +3,8 @@ title: 'Migrations are a product, not a chore'
 description: 'Why most technical migrations die after the first proof of concept, and how treating them like product launches, with planning, tracking, and AI-assisted execution, is the only way to actually finish them.'
 pubDatetime: 2026-03-28T12:00:00+01:00
 tags: ['development', 'opinion', 'workflow', 'ai']
-heroImage: '/assets/img/2026/migrations-are-a-product-not-a-chore/migration-rain-and-night.png'
-heroImageAlt: 'A developer surrounded by screens with dasbhoards and graphs, with rain pouring against the windows of a dark city at night.'
+heroImage: '/assets/img/2026/migrations-are-a-product-not-a-chore/cover.jpg'
+heroImageAlt: 'Line drawing of a path rising from an old server stack, past a plan, a progress bar and an AI helper, to a rocket launch next to a new stack.'
 ---
 
 I have seen recently a developer implementing FastAPI's lifespan management in one microservice. It was well done, clean implementation, proper context managers, everything by the book. However, the proof of concept seemed like it was good enough and this was never deployed to other projects, there was nothing planned. One service was done, the rest would happen "eventually," and eventually is where migrations go to die.

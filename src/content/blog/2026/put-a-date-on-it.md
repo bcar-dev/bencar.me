@@ -3,11 +3,13 @@ title: 'Put a date on it'
 description: 'In March I was getting dropped on climbs I used to enjoy, and recently I rode 122 km and 3 000 m of climbing to the summit of Mont Ventoux. Almost nothing changed in between except that a date existed in the calendar, so this is a story about how a fixed deadline builds consistency, what the research has to say about it and why the same mechanism may apply to your everyday life.'
 pubDatetime: 2026-08-17T18:00:00+02:00
 tags: ['cycling', 'learning', 'personal']
-heroImage: '/assets/img/2026/put-a-date-on-it/ventoux-summit-riders.jpeg'
-heroImageAlt: 'Riders at the top of Mont Ventoux, above the bald limestone dome.'
+heroImage: '/assets/img/2026/put-a-date-on-it/cover.jpg'
+heroImageAlt: 'Line drawing of a road winding up Mont Ventoux to its summit tower, with bikes climbing from a calendar page at the start.'
 ---
 
 _There is a stretch on the Ventoux just after the Saint-Estève bend, where the road tilts up and then simply stays there. The forest closes in, the gradient holds around 9 to 10% for something like seven kilometres, and everybody around you gradually stops talking. That was the stretch where I found out whether five months of ordinary rides had been worth anything._
+
+![Riders at the top of Mont Ventoux, above the bald limestone dome](../../../assets/img/2026/put-a-date-on-it/ventoux-summit-riders.jpeg)
 
 ## The date matters more than the motivation
 

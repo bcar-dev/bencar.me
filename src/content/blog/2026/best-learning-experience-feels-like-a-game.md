@@ -3,8 +3,8 @@ title: 'Why the best learning experience feels like a game'
 description: 'Why does gamification actually work and how can you use it to learn more effectively. Learn about the theory, how it is already applied at scale and how you can start using those principles in your daily work.'
 pubDatetime: 2026-03-07T22:30:00+01:00
 tags: ['development', 'learning']
-heroImage: '/assets/img/2026/best-learning-experience-feels-like-a-game/classroom-origami.jpeg'
-heroImageAlt: 'A student in a classroom in doing an origami during a class break.'
+heroImage: '/assets/img/2026/best-learning-experience-feels-like-a-game/cover.jpg'
+heroImageAlt: 'Line drawing of an open book, a path of progress markers and a rising arrow reaching a star.'
 ---
 
 Today I want to talk about playing. I've been passionate about playing and especially gaming since I was a kid. I mean ... I'm not very original, you probably have been too. I played football, board games, video games, the list goes on.

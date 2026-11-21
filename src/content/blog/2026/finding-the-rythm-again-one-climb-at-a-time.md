@@ -3,11 +3,13 @@ title: 'Finding the rythm again, one climb at a time'
 description: 'After months away from the bike, I set out to find my rhythm again — one pedal stroke at a time. From early morning rides to evenings in the hills above Grasse with friends. A short story about how to find motivation again.'
 pubDatetime: 2026-03-10T12:30:00+01:00
 tags: ['cycling', 'travel']
-heroImage: '/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cycling-friends-gourdon.jpeg'
-heroImageAlt: 'Gourdon, France, with cycling friends.'
+heroImage: '/assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cover.jpg'
+heroImageAlt: 'Line drawing of a road from a kettlebell at sunrise, climbing past cyclists to a group of riders at the top.'
 ---
 
 _There is a moment every cyclist knows. The one where you're clipping in, the morning air still cool on your face, and everything else in life temporarily disappears. Riding feels effortless, you're not gasping for breath the second you push a little harder, and you can slip into a flow state. That feeling is what we're chasing, but getting there isn't straightforward, and it takes real effort._
+
+![Gourdon, France, with cycling friends](../../../assets/img/2026/finding-the-rythm-again-one-climb-at-a-time/cycling-friends-gourdon.jpeg)
 
 ## Finding the motivation to ride
 
