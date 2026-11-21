@@ -27,10 +27,9 @@ Mornings started early, because in July the heat arrives fast and the good hours
 
 Some of the easiest kilometres came on an old railway line that has been turned into a voie verte, a few metres wide, cut into the rock in places, running with a gentle gradient because trains never liked steep ones either. It is not the most dramatic riding of the week, but rolling along a shaded, car-free strip of tarmac with the river somewhere below is a very pleasant way to warm the legs up before the real climbing starts.
 
-![The voie verte, an old railway line turned into a cycle path](../../../assets/img/2026/a-week-in-the-cevennes/voie-verte.jpeg)
-
 Going west from Alès takes you into the Gardon valleys, through Anduze and Saint-Jean-du-Gard, and then up into the Vallée Française towards La Barre-des-Cévennes. Going north-west instead, around Branoux-les-Taillades and La Grand-Combe, gives you a different Cévennes, a little more mineral, with old mining villages and roads that climb out of the valley in long patient switchbacks.
 
+![The voie verte, an old railway line turned into a cycle path](../../../assets/img/2026/a-week-in-the-cevennes/voie-verte.jpeg)
 ![Green ridges, one after the other](../../../assets/img/2026/a-week-in-the-cevennes/green-ridges.jpeg)
 
 ## Mont Aigoual
@@ -40,9 +39,7 @@ The one climb everybody asks about is Mont Aigoual, which at 1 565 metres is the
 It is a long way up, and what makes it enjoyable is that the road keeps changing character. You spend a long time in the forest, with the valley opening below you at every turn, and then the trees thin out, the wind picks up, and the last part is bare and exposed with the observatory sitting on top like something from another century. Even at this time of year it is a bit cold up there, so I usually do not stay long.
 
 ![The valley opening up on the way to the Aigoual](../../../assets/img/2026/a-week-in-the-cevennes/valley-from-the-aigoual-climb.jpeg)
-
 ![Ridges near the summit](../../../assets/img/2026/a-week-in-the-cevennes/ridges-near-the-summit.jpeg)
-
 ![The view from the observatory](../../../assets/img/2026/a-week-in-the-cevennes/aigoual-observatory-view.jpeg)
 
 ## The first hour of the day

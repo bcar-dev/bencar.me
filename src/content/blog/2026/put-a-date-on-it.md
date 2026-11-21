@@ -9,7 +9,9 @@ heroImageAlt: 'Line drawing of a road winding up Mont Ventoux to its summit towe
 
 _There is a stretch on the Ventoux just after the Saint-Estève bend, where the road tilts up and then simply stays there. The forest closes in, the gradient holds around 9 to 10% for something like seven kilometres, and everybody around you gradually stops talking. That was the stretch where I found out whether five months of ordinary rides had been worth anything._
 
+![The start pen in Vaison-la-Romaine, early morning](../../../assets/img/2026/put-a-date-on-it/starting-line-vaison.jpeg)
 ![Riders at the top of Mont Ventoux, above the bald limestone dome](../../../assets/img/2026/put-a-date-on-it/ventoux-summit-riders.jpeg)
+![Strava recap: 122,53 km, 3 024 m, 6h09](../../../assets/img/2026/put-a-date-on-it/strava-recap.jpeg)
 
 ## The date matters more than the motivation
 
@@ -18,8 +20,6 @@ I wrote a few months ago that [motivation follows action](/posts/finding-the-ryt
 What tends to work far better for me and for most people I ride with is considerably simpler: you register for an event, you pay for it, and the calendar does a good part of the work from then on. In my case that was L'Étape du Tour de France Femmes avec Zwift, second edition, on Thursday 6 August 2026, running from Vaison-la-Romaine to the summit of Mont Ventoux, for 117 km and 2 950 m of climbing, with 10 500 riders on the start list.
 
 Once that was booked, the daily question stopped being whether I felt like riding, because the date was not going to move and the Ventoux was not going to get any shorter or easier. What remained was a fixed number of weeks in which to rebuild some strength and some endurance, the only alternative being to turn up underprepared to a very long day in the heat.
-
-![The start pen in Vaison-la-Romaine, early morning](../../../assets/img/2026/put-a-date-on-it/starting-line-vaison.jpeg)
 
 ## The five months in between
 
@@ -45,8 +45,6 @@ This is one of the better studied areas in behavioural science, and the findings
 [Gollwitzer and Sheeran](https://www.researchgate.net/publication/37367696_Implementation_Intentions_and_Goal_Achievement_A_Meta-Analysis_of_Effects_and_Processes) went one level lower, into how a goal turns into an action, by pooling 94 studies and more than eight thousand participants. They found that implementation intentions, meaning if-then plans of the form "when X happens, I will do Y", had a medium-to-large effect on goal attainment of around d ≈ 0.65, and what makes that striking is that the comparison group was not people without goals but people who already held the intention. Deciding to ride is therefore worth considerably less than deciding that on Tuesday evening you will go straight home, put your kit on and ride for two hours.
 
 Put end to end, those results describe a fairly precise recipe: a goal that is hard, specific, dated and committed to in front of other people, broken into steps near enough to be reached soon, each producing progress you can actually see. That is four decades of literature, and it also happens to be a decent description of what training for a cyclosportive looks like.
-
-![Strava recap: 122,53 km, 3 024 m, 6h09](../../../assets/img/2026/put-a-date-on-it/strava-recap.jpeg)
 
 ## The same mechanism away from the bike
 

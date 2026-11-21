@@ -50,5 +50,4 @@ The code will still be there on Monday. The bugs too, probably. But you'll come 
 One last recommendation if you like hiking, go and do the Saint-Victoire ascent, it's beautiful up there.
 
 ![View from top of the Saint-Victoire](../../../assets/img/2026/escaping-the-screen/view-top-sainte-victoire.jpeg)
-
 ![Prieuré Saint-Victoire](../../../assets/img/2026/escaping-the-screen/prieure-sainte-victoire.jpeg)
