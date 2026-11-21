@@ -77,11 +77,7 @@ onMounted(() => {
             </p>
             <ul v-else class="space-y-6">
                 <li v-for="post in filteredPosts" :key="post.slug" class="group">
-                    <a
-                        :href="`/posts/${post.slug}`"
-                        :style="{ viewTransitionName: `title-${post.slug}` }"
-                        :class="POST_TITLE_LINK_CLASS"
-                    >
+                    <a :href="`/posts/${post.slug}`" :class="POST_TITLE_LINK_CLASS">
                         {{ post.frontmatter.title }}
                     </a>
                     <div

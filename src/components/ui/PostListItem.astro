@@ -29,7 +29,7 @@ const hasSlot = Astro.slots.has('default');
 ---
 
 <li class="group">
-    <PostTitle href={`/posts/${slug}`} class={titleClassName} transitionName={`title-${slug}`}>
+    <PostTitle href={`/posts/${slug}`} class={titleClassName}>
         {title}
     </PostTitle>
     <div class="mt-1 flex flex-wrap gap-x-2 gap-y-2 items-center text-sm text-foreground/75 opacity-80">
