@@ -11,6 +11,10 @@
     --color-accent: var(--accent);
     --color-muted: var(--muted);
     --color-border: var(--border);
+
+    /* Families registered in astro.config.mjs and emitted by <Font /> in BaseLayout. */
+    --font-sans: var(--font-dm-sans);
+    --font-serif: var(--font-source-serif);
 }
 
 @layer base {
@@ -38,10 +42,9 @@
 
     html {
         @apply scroll-smooth;
-        font-size: 14px;
     }
 
     body {
-        @apply flex min-h-screen flex-col bg-background font-mono text-foreground;
+        @apply flex min-h-screen flex-col bg-background font-sans text-foreground;
     }
 }

@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -33,6 +33,24 @@ export default defineConfig({
         defaultStrategy: 'hover',
     },
     integrations: [vue(), pagefindIntegration(), sitemap()],
+    fonts: [
+        {
+            provider: fontProviders.google(),
+            name: 'DM Sans',
+            cssVariable: '--font-dm-sans',
+            weights: ['400 700'],
+            styles: ['normal', 'italic'],
+            fallbacks: ['sans-serif'],
+        },
+        {
+            provider: fontProviders.google(),
+            name: 'Source Serif 4',
+            cssVariable: '--font-source-serif',
+            weights: ['400 700'],
+            styles: ['normal', 'italic'],
+            fallbacks: ['serif'],
+        },
+    ],
     vite: {
         plugins: [tailwindcss(), Icons({ compiler: 'vue3' })],
     },
