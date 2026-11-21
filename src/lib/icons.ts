@@ -12,7 +12,6 @@ import X from '~icons/lucide/x';
 import Search from '~icons/lucide/search';
 import Sun from '~icons/lucide/sun';
 import Moon from '~icons/lucide/moon';
-import List from '~icons/lucide/list';
 
 export const ICONS = {
     github: Github,
@@ -25,7 +24,6 @@ export const ICONS = {
     search: Search,
     sun: Sun,
     moon: Moon,
-    list: List,
 } satisfies Record<string, Component>;
 
 export type IconName = keyof typeof ICONS;

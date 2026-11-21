@@ -58,9 +58,17 @@ const jsonLd = JSON.stringify({
     ogType="article"
     image={hero?.src}
 >
-    <article class="py-8 w-full">
+    <article class="relative py-8 w-full">
         <ReadingProgress client:idle />
         <script type="application/ld+json" set:html={jsonLd} is:inline />
+        {/* Contents rail in the right margin beside the centered article. The 850px
+            article + 40px gap + 200px rail only clears the viewport edge from
+            1400px. Below that the rail is hidden, so client:visible never hydrates it. */}
+        <aside class="absolute inset-y-8 left-full ml-10 hidden w-[200px] min-[1400px]:block">
+            <div class="sticky top-20 max-h-[calc(100vh-7rem)] overflow-y-auto">
+                <TableOfContents headings={tocEntries} client:visible />
+            </div>
+        </aside>
         <header class="mb-8" id="top">
             <h1
                 transition:name={`title-${post.slug}`}
@@ -99,7 +107,6 @@ const jsonLd = JSON.stringify({
         <hr class="border-border opacity-50 mb-8" />
 
         <div class="prose prose-lg dark:prose-invert max-w-none markdown-content">
-            <TableOfContents headings={tocEntries} client:visible />
             <Content />
         </div>
 
