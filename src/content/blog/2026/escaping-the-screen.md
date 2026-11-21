@@ -3,9 +3,11 @@ title: 'Escaping the screen'
 description: 'When the code stops making sense and the screen starts to blur, the best thing a developer can do is clip in and ride. A weekend discovering the quiet roads and golden villages of the south Luberon.'
 pubDatetime: 2026-04-07T21:00:00+02:00
 tags: ['cycling', 'travel', 'lifestyle']
-heroImage: '/assets/img/2026/escaping-the-screen/bonnieux.jpeg'
-heroImageAlt: 'Bonnieux, Provence.'
+heroImage: '/assets/img/2026/escaping-the-screen/cover.jpg'
+heroImageAlt: 'Line drawing of a closed laptop facing vineyards and a road winding up to a golden hilltop village.'
 ---
+
+![Bonnieux, Provence](../../../assets/img/2026/escaping-the-screen/bonnieux.jpeg)
 
 ## Terminals and IDEs everywhere
 

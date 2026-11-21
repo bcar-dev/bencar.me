@@ -3,8 +3,8 @@ title: 'Hello World: building my personal website'
 description: 'The very first post on bencar.me - why I decided to build a personal website, what I plan to write about and the tech stack behind my blog.'
 pubDatetime: 2026-02-21T17:00:00+01:00
 tags: ['development', 'personal']
-heroImage: '/assets/img/2026/hello-world/generated-man-coding.png'
-heroImageAlt: 'A cozy lofi-style developer workspace with plants and a sunset view'
+heroImage: '/assets/img/2026/hello-world/cover.jpg'
+heroImageAlt: 'Line drawing of an open book linked to a terminal, a neural network, a bicycle wheel and a growing plant.'
 ---
 
 Welcome to **bencar.me**!

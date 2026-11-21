@@ -12,7 +12,7 @@ describe('getHeroImage', () => {
     });
 
     it('resolves an existing frontmatter hero path to optimizable image metadata', () => {
-        const img = getHeroImage('/assets/img/2026/hello-world/generated-man-coding.png');
+        const img = getHeroImage('/assets/img/2026/hello-world/cover.jpg');
         expect(img).toBeDefined();
         expect(typeof img?.src).toBe('string');
         expect(img?.width).toBeGreaterThan(0);

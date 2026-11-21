@@ -3,8 +3,8 @@ title: "AI won't replace developers, it will raise the bar for what being one me
 description: 'AI is changing the landscape of software development; it is making execution cheap and clarity essential. The real advantage now belongs to those who can define problems precisely, design testable systems, and shape outcomes rather than just produce code.'
 pubDatetime: 2026-02-22T14:45:32+01:00
 tags: ['development', 'opinion', 'ai']
-heroImage: '/assets/img/2026/ai-wont-replace-developers/generated-photorealistic-man-coding.png'
-heroImageAlt: "A generated, photorealistic image of a developer in his workspace with a monstera plant, books, and a view of the city of Paris. This could well be me, but some small details don't lie."
+heroImage: '/assets/img/2026/ai-wont-replace-developers/cover.jpg'
+heroImageAlt: 'Line drawing of AI-written code turning into a defined problem, a system design, passing tests and a final system.'
 ---
 
 There is a trend in the tech industry-a sort of consensus applied and almost evangelized by big tech companies-that AI will kill entry-level roles in software development.

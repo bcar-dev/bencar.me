@@ -3,11 +3,13 @@ title: 'A week in the Cévennes'
 description: 'A week of riding in the Cévennes, the region I keep coming back to whenever I want to disappear on a bike for a few days. Forests, empty roads, a long climb to Mont Aigoual and a lot of photos.'
 pubDatetime: 2026-07-19T20:00:00+02:00
 tags: ['cycling', 'travel']
-heroImage: '/assets/img/2026/a-week-in-the-cevennes/lone-pine-over-the-valleys.jpeg'
-heroImageAlt: 'A lone pine above the forested ridges of the Cévennes.'
+heroImage: '/assets/img/2026/a-week-in-the-cevennes/cover.jpg'
+heroImageAlt: 'Line drawing of a road with cyclists winding through forested hills up to the Mont Aigoual observatory.'
 ---
 
 _Some places you visit once and tick off a list. The Cévennes are the opposite for me. This is a place I keep going back to, and a week there on the bike still feels short. I wish I could stay there for months._
+
+![A lone pine above the forested ridges of the Cévennes](../../../assets/img/2026/a-week-in-the-cevennes/lone-pine-over-the-valleys.jpeg)
 
 ## Why this region and not the big mountains
 

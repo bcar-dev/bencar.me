@@ -3,8 +3,8 @@ title: 'From flow to flight deck: how AI changed the rhythm of writing software'
 description: 'Some personal notes on how AI has changed the rhythm of the developer job. The restful flow of typing seems to be giving way to constantly piloting AI. I do not have firm answers, but I wanted to write down what I think we might be trading away, and what we could do with the time we get back.'
 pubDatetime: 2026-05-30T18:00:00+02:00
 tags: ['development', 'opinion', 'ai', 'productivity']
-heroImage: '/assets/img/2026/from-flow-to-flight-deck/what-it-feels-like-to-be-a-developer.png'
-heroImageAlt: 'A software developer stands alone in a dark office, facing a towering wall of monitors filled with live dashboards, code, and streaming system data. Blue screen glow and cinematic lighting create a tense, overwhelming atmosphere of managing too much information at once.'
+heroImage: '/assets/img/2026/from-flow-to-flight-deck/cover.jpg'
+heroImageAlt: 'Line drawing of a developer seen from behind, supervising a cockpit of screens and dials.'
 ---
 
 There was a rhythm to writing software that you only really noticed once it was gone.
