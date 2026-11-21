@@ -28,7 +28,7 @@ describe('Header.astro', () => {
     it('renders the author bio', async () => {
         const html = await container.renderToString(Header);
         // bio contains a newline; check the first line is present
-        expect(html).toContain('Backend, data and AI.');
+        expect(html).toContain('Software engineering, data and AI.');
     });
 
     it('server-renders the navigation island with its links', async () => {
