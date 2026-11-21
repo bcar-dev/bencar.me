@@ -1,15 +1,47 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import TagFilter from '@/components/ui/TagFilter.vue';
 import { getAllPosts, getAllTags } from '@/lib/posts';
+import { getHeroImage } from '@/lib/heroImages';
+import type { OptimizedImage } from '@/types';
+
+const THUMBNAIL_WIDTH = 168;
+const THUMBNAIL_HEIGHT = 112;
+
+/**
+ * TagFilter is a Vue island and can't use <Image>, so optimize the cover
+ * thumbnails here (same size as on the Posts page) and hand it plain URLs.
+ */
+async function thumbnail(hero: ImageMetadata): Promise<OptimizedImage> {
+    const image = await getImage({
+        src: hero,
+        width: THUMBNAIL_WIDTH,
+        height: THUMBNAIL_HEIGHT,
+        densities: [1, 2],
+    });
+    return {
+        src: image.src,
+        srcset: image.srcSet.attribute,
+        width: THUMBNAIL_WIDTH,
+        height: THUMBNAIL_HEIGHT,
+    };
+}
 
 const posts = getAllPosts();
 const tags = getAllTags();
+
+const thumbnails: Record<string, OptimizedImage> = {};
+for (const post of posts) {
+    const hero = getHeroImage(post.frontmatter.heroImage);
+    if (hero) thumbnails[post.slug] = await thumbnail(hero);
+}
 ---
 
 <BaseLayout title="Tags" description="Filter blog posts by tags">
     <div class="py-8 w-full">
         <h1 class="my-8 text-3xl font-bold tracking-wider sm:text-4xl">Tags</h1>
-        <TagFilter allTags={tags} allPosts={posts} client:load />
+        <TagFilter allTags={tags} allPosts={posts} thumbnails={thumbnails} client:load />
     </div>
 </BaseLayout>
