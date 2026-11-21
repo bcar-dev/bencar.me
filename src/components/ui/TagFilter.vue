@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import type { Post } from '@/types';
+import type { OptimizedImage, Post } from '@/types';
 import Icon from '@/components/Icon.vue';
 import PostMeta from '@/components/ui/PostMeta.vue';
 import Tag from '@/components/ui/Tag.vue';
 import { POST_TITLE_LINK_CLASS } from '@/lib/ui';
 import { useTagFilter } from '@/composables/useTagFilter';
 
-const props = defineProps<{ allTags: string[]; allPosts: Post[] }>();
+const props = withDefaults(
+    defineProps<{
+        allTags: string[];
+        allPosts: Post[];
+        /** Cover thumbnails by post slug; posts without one show only their description. */
+        thumbnails?: Record<string, OptimizedImage>;
+    }>(),
+    { thumbnails: () => ({}) }
+);
 
 // Start unfiltered so the server-rendered list matches first client paint, then
 // apply ?tag= after hydration (query params aren't available at static build time).
@@ -95,12 +103,34 @@ onMounted(() => {
                             <Tag v-for="tag in post.frontmatter.tags" :key="tag" :tag="tag" />
                         </div>
                     </div>
-                    <p
-                        v-if="post.frontmatter.description"
-                        class="mt-3 text-foreground/80 leading-relaxed italic"
-                    >
-                        {{ post.frontmatter.description }}
-                    </p>
+                    <div class="mt-4 flex flex-col sm:flex-row gap-6 items-start">
+                        <!-- Same destination as the title link, so it's hidden from keyboard
+                             and screen readers to avoid announcing the post twice. -->
+                        <a
+                            v-if="thumbnails[post.slug]"
+                            :href="`/posts/${post.slug}`"
+                            tabindex="-1"
+                            aria-hidden="true"
+                            class="hidden sm:block shrink-0 overflow-hidden rounded-lg border border-accent/20 group-hover:border-accent/50 transition-colors bg-foreground/5"
+                        >
+                            <img
+                                :src="thumbnails[post.slug].src"
+                                :srcset="thumbnails[post.slug].srcset"
+                                :width="thumbnails[post.slug].width"
+                                :height="thumbnails[post.slug].height"
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                class="w-42 h-28 object-cover"
+                            />
+                        </a>
+                        <p
+                            v-if="post.frontmatter.description"
+                            class="flex-1 min-w-0 text-lg text-foreground/80 leading-relaxed line-clamp-3"
+                        >
+                            {{ post.frontmatter.description }}
+                        </p>
+                    </div>
                 </li>
             </ul>
         </div>

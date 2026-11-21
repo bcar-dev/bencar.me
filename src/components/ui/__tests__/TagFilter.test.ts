@@ -63,6 +63,22 @@ describe('TagFilter', () => {
         expect(container.querySelector('li p')).toBeNull();
     });
 
+    it("shows a post's cover thumbnail when one is provided", () => {
+        const thumbnails = {
+            p1: {
+                src: '/_astro/p1.webp',
+                srcset: '/_astro/p1@2x.webp 2x',
+                width: 168,
+                height: 112,
+            },
+        };
+        const { container } = render(TagFilter, { props: { allTags, allPosts, thumbnails } });
+        const images = container.querySelectorAll('img');
+        expect(images).toHaveLength(1);
+        expect(images[0]).toHaveAttribute('src', '/_astro/p1.webp');
+        expect(images[0].closest('a')).toHaveAttribute('href', '/posts/p1');
+    });
+
     it('applies the ?tag= query param on mount', async () => {
         window.history.replaceState({}, '', '/tags?tag=ai');
         try {
