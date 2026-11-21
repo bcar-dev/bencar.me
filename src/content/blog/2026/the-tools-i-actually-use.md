@@ -23,11 +23,11 @@ The plugins that stayed:
 
 ## The terminal
 
-I switched to [Ghostty](https://ghostty.org/) a few months ago and never looked back. It is fast, it is minimal, and easy to config.
+I switched to [Ghostty](https://ghostty.org/) a few months ago and never looked back. It's fast, minimal and easy to config.
 
 ## CLI tools
 
-The default Unix utilities are fine, but there are replacements that are just better in ways that compound over a full working day:
+The default Unix utilities are fine, but there some faster replacements:
 
 - **ripgrep** (`rg`) - faster than grep, better defaults, respects `.gitignore` out of the box
 - **fd** - a better `find`, simpler syntax, faster
@@ -50,6 +50,7 @@ The default Unix utilities are fine, but there are replacements that are just be
 - **Serena** - codebase indexing that makes Claude Code actually useful on large projects
 - **Caveman** - compresses agent output by roughly 75%, making responses faster and cheaper without losing technical accuracy
 - **Colgrep** - semantic code search that combines regex filtering with AI-powered ranking, right from the terminal
+- **Ponytail** - keeps the agent from over-engineering, nudging it towards the simplest change that does the job
 
 With Caveman, Colgrep, Serena, and rtk combined, I never find myself reaching Anthropic's Max $100/month plan limit. I would strongly recommend these tools to anyone looking to get more out of their token budget.
 
