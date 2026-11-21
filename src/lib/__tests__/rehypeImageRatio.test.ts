@@ -1,8 +1,11 @@
 // @vitest-environment node
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import type { Element, Root } from 'hast';
-import { rehypeImageRatio } from '../rehypeImageRatio';
+import sharp from 'sharp';
+import { displayedRatio, rehypeImageRatio } from '../rehypeImageRatio';
 
 const POST = path.resolve('src/content/blog/2026/put-a-date-on-it.md');
 
@@ -37,6 +40,22 @@ describe('rehypeImageRatio', () => {
         await run([portrait, landscape]);
         expect(portrait.properties.className).toBeUndefined();
         expect(landscape.properties.className).toEqual(['landscape']);
+    });
+
+    it('uses the displayed shape of a photo stored rotated by its camera', async () => {
+        // Phones often save a portrait shot as a landscape file plus an EXIF
+        // "rotate 90°" flag (orientation 6); browsers show it as portrait.
+        const dir = mkdtempSync(path.join(tmpdir(), 'image-ratio-'));
+        const file = path.join(dir, 'rotated.jpg');
+        try {
+            await sharp({ create: { width: 40, height: 20, channels: 3, background: '#fff' } })
+                .jpeg()
+                .withMetadata({ orientation: 6 })
+                .toFile(file);
+            expect(await displayedRatio(file)).toBe(0.5);
+        } finally {
+            rmSync(dir, { recursive: true, force: true });
+        }
     });
 
     it('leaves remote images alone', async () => {

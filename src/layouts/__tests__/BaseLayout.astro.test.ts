@@ -68,6 +68,20 @@ describe('BaseLayout.astro', () => {
         expect(html).toContain(siteConfig.author.name);
     });
 
+    it('keeps page content in the reading column unless the page asks for the wide frame', async () => {
+        const mainTag = (html: string) => html.match(/<main[^>]*>/)?.[0] ?? '';
+        const reading = await container.renderToString(BaseLayout);
+        expect(mainTag(reading)).toContain('max-w-[850px]');
+        const wide = await container.renderToString(BaseLayout, { props: { wide: true } });
+        expect(mainTag(wide)).not.toContain('max-w-[850px]');
+    });
+
+    it('loads the site fonts', async () => {
+        const html = await container.renderToString(BaseLayout);
+        expect(html).toContain('DM Sans');
+        expect(html).toContain('Source Serif 4');
+    });
+
     it('inlines the no-flash theme script so it runs before paint', async () => {
         const html = await container.renderToString(BaseLayout);
         expect(html).toContain("localStorage.getItem('theme')");
