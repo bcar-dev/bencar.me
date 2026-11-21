@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { loadRenderers } from 'astro:container';
 import { getContainerRenderer } from '@astrojs/vue/container-renderer';
@@ -7,7 +7,9 @@ import { makePost } from '@/test/factories';
 import { siteConfig } from '@/config/site';
 
 const getAllPosts = vi.fn();
+const getHeroImage = vi.fn();
 vi.mock('@/lib/posts', () => ({ getAllPosts: () => getAllPosts() }));
+vi.mock('@/lib/heroImages', () => ({ getHeroImage: (src?: string) => getHeroImage(src) }));
 
 let container: AstroContainer;
 beforeAll(async () => {
@@ -15,43 +17,61 @@ beforeAll(async () => {
     container = await AstroContainer.create({ renderers });
 });
 
+beforeEach(() => getHeroImage.mockReturnValue(undefined));
+
 async function render() {
     const { default: Home } = await import('../index.astro');
     return container.renderToString(Home);
 }
 
+function makePosts(count: number) {
+    return Array.from({ length: count }, (_, i) =>
+        makePost({ slug: `post-${i}`, frontmatter: { title: `Title ${i}` } })
+    );
+}
+
 describe('index.astro', () => {
-    it('lists the recent posts with links to each one', async () => {
-        getAllPosts.mockReturnValue([makePost({ slug: 'first' }), makePost({ slug: 'second' })]);
+    it('opens the four-post slider on the latest post', async () => {
+        getAllPosts.mockReturnValue(makePosts(6));
         const html = await render();
-        expect(html).toContain('Recent Posts');
-        expect(html).toContain('href="/posts/first"');
-        expect(html).toContain('href="/posts/second"');
+        expect(html).toContain('aria-roledescription="carousel"');
+        expect(html).toContain('01 / 04');
+        expect(html).toMatch(/<h2[^>]*>\s*<a href="\/posts\/post-0"/);
     });
 
-    it('shows the all-posts link when there is at least one post', async () => {
-        getAllPosts.mockReturnValue([makePost({ slug: 'only' })]);
+    it('lists every post in the grid, including the featured ones', async () => {
+        getAllPosts.mockReturnValue(makePosts(6));
         const html = await render();
-        expect(html).toContain('href="/posts"');
-        expect(html).toContain('All Posts');
+        expect(html).toContain('href="/posts/post-5"');
+        expect(html.match(/<h3[^>]*>\s*Title \d/g)).toHaveLength(6);
     });
 
-    it('shows an empty state and hides the all-posts link when there are no posts', async () => {
+    it('counts the articles in the grid heading', async () => {
+        getAllPosts.mockReturnValue(makePosts(6));
+        expect(await render()).toMatch(/<span[^>]*>6<\/span>\s*Articles/);
+
+        getAllPosts.mockReturnValue(makePosts(1));
+        expect(await render()).toMatch(/<span[^>]*>1<\/span>\s*Article\s*</);
+    });
+
+    it('hands the slider optimized cover images', async () => {
+        getHeroImage.mockReturnValue({
+            src: '/_astro/hero.png',
+            width: 1600,
+            height: 900,
+            format: 'png',
+        });
+        getAllPosts.mockReturnValue(makePosts(1));
+        const html = await render();
+        const slider = html.slice(html.indexOf('aria-roledescription="carousel"'));
+        expect(slider).toMatch(/<img[^>]+srcset="[^"]*800w/);
+    });
+
+    it('shows an empty state when there are no posts', async () => {
         getAllPosts.mockReturnValue([]);
         const html = await render();
         expect(html).toContain('No posts yet. Stay tuned!');
-        expect(html).not.toContain('href="/posts/"');
-        expect(html).not.toContain('All Posts');
-    });
-
-    it('caps the list at the configured recent-post count', async () => {
-        const count = siteConfig.pagination.recentPostsCount;
-        getAllPosts.mockReturnValue(
-            Array.from({ length: count + 3 }, (_, i) => makePost({ slug: `post-${i}` }))
-        );
-        const html = await render();
-        expect(html).toContain(`href="/posts/post-${count - 1}"`);
-        expect(html).not.toContain(`href="/posts/post-${count}"`);
+        expect(html).not.toContain('aria-roledescription="carousel"');
     });
 
     it('uses the bare site name as the title', async () => {

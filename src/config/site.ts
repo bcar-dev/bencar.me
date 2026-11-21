@@ -15,7 +15,4 @@ export const siteConfig = {
         { title: 'Posts', href: '/posts' },
         { title: 'About', href: '/about' },
     ],
-    pagination: {
-        recentPostsCount: 10,
-    },
 };

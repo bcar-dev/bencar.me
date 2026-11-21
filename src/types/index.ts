@@ -53,3 +53,21 @@ export interface YearGroup {
     year: number;
     months: MonthGroup[];
 }
+
+/** A cover image already optimized by `getImage`, ready for a plain <img> in an island. */
+export interface OptimizedImage {
+    src: string;
+    srcset: string;
+    width: number;
+    height: number;
+}
+
+/** One post in the landing page slider. */
+export interface FeaturedSlide {
+    slug: string;
+    title: string;
+    description: string;
+    pubDatetime: string;
+    readingTime: string;
+    image?: OptimizedImage;
+}
