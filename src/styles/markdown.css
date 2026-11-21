@@ -53,8 +53,30 @@
         @apply text-foreground/90;
     }
 
+    /* Cap the height so portrait photos don't fill several screens. --ratio
+       (width / height, set at build time by rehypeImageRatio) turns that height cap
+       into a width cap, so the image keeps its width/height attributes and the
+       browser reserves its exact size before it loads. */
     .markdown-content img {
-        @apply rounded-lg border border-border;
+        @apply mx-auto rounded-lg border border-border;
+        max-width: min(100%, calc(min(70vh, 40rem) * var(--ratio, 100)));
+    }
+
+    /* Images written on consecutive lines (no blank line between them) form one
+       paragraph, shown as a row of equal tiles: same width, same height, each
+       photo cropped to fill its tile. All-portrait rows use 3:4 tiles; a row
+       with a landscape photo (class set by rehypeImageRatio) uses squares so
+       both shapes crop evenly. Phones stack the photos at their natural shape. */
+    .markdown-content p:has(> img + img) {
+        @apply grid gap-4 sm:auto-cols-fr sm:grid-flow-col;
+    }
+
+    .markdown-content p:has(> img + img) > img {
+        @apply my-0 sm:aspect-[3/4] sm:w-full sm:max-w-full sm:object-cover;
+    }
+
+    .markdown-content p:has(> img + img):has(> img.landscape) > img {
+        @apply sm:aspect-square;
     }
 
     .markdown-content hr {

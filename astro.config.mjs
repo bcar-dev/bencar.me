@@ -9,6 +9,7 @@ import { unified } from '@astrojs/markdown-remark';
 import { fileURLToPath } from 'node:url';
 
 import { siteConfig } from './src/config/site.ts';
+import { rehypeImageRatio } from './src/lib/rehypeImageRatio.ts';
 
 /** Build the Pagefind search index into the final output dir after the build. */
 function pagefindIntegration() {
@@ -57,11 +58,13 @@ export default defineConfig({
     markdown: {
         // Astro 6 takes a unified() processor; declare GFM + smartypants on it
         // (Astro deprecates the top-level markdown.gfm/smartypants when a processor
-        // is set) and add rehype plugins for heading slug ids + anchor links.
+        // is set) and add rehype plugins for heading slug ids + anchor links, and
+        // each body image's aspect ratio (used by markdown.css to cap its height).
         processor: unified({
             gfm: true,
             smartypants: true,
             rehypePlugins: [
+                rehypeImageRatio,
                 rehypeSlug,
                 [
                     rehypeAutolinkHeadings,
