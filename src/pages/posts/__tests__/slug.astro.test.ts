@@ -128,6 +128,24 @@ describe('posts/[slug].astro', () => {
         expect(html).toContain('#a-detail');
     });
 
+    it('shows the contents in a side rail beside the article, not inside its text', async () => {
+        getPostWithNeighbors.mockReturnValue({
+            post: makePost({
+                slug: 'with-toc',
+                headings: [{ text: 'First Section', slug: 'first-section', index: 0, level: 2 }],
+            }),
+            prev: null,
+            next: null,
+        });
+        getHeroImage.mockReturnValue(undefined);
+        const html = await render({ id: 'with-toc' });
+        const rail = html.slice(html.indexOf('<aside'), html.indexOf('</aside>'));
+        expect(rail).toContain('aria-label="Table of contents"');
+        expect(rail).toContain('href="#first-section"');
+        const body = html.slice(html.indexOf('markdown-content'));
+        expect(body).not.toContain('aria-label="Table of contents"');
+    });
+
     it('keeps the cover image off the article page', async () => {
         getPostWithNeighbors.mockReturnValue({
             post: makePost({
