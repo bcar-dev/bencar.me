@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Tag from '@/components/ui/Tag.vue';
 import PostMeta from '@/components/ui/PostMeta.vue';
@@ -82,19 +81,6 @@ const jsonLd = JSON.stringify({
                     {post.frontmatter.tags.map((tag) => (
                         <Tag tag={tag} />
                     ))}
-                </div>
-            )}
-
-            {hero && (
-                <div class="mt-6 overflow-hidden rounded-lg border-2 border-accent/30">
-                    <Image
-                        src={hero}
-                        alt={post.frontmatter.heroImageAlt ?? post.frontmatter.title}
-                        widths={[480, 768, 1200]}
-                        sizes="(max-width: 768px) 100vw, 768px"
-                        class="w-full h-auto"
-                        loading="eager"
-                    />
                 </div>
             )}
         </header>
