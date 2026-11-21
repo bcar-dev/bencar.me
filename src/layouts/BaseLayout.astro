@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import { siteConfig } from '@/config/site';
@@ -57,6 +58,9 @@ const ogImage = image ? new URL(image, siteConfig.url).href : undefined;
         <meta name="twitter:description" content={description} />
         {ogImage && <meta name="twitter:image" content={ogImage} />}
 
+        <Font cssVariable="--font-dm-sans" preload={[{ style: 'normal' }]} />
+        <Font cssVariable="--font-source-serif" preload={[{ style: 'normal' }]} />
+
         <ClientRouter />
 
         {/* No-flash theme: set the `dark` class from localStorage / system preference
@@ -77,7 +81,7 @@ const ogImage = image ? new URL(image, siteConfig.url).href : undefined;
             })();
         </script>
     </head>
-    <body class="flex min-h-screen flex-col bg-background font-mono text-foreground">
+    <body class="flex min-h-screen flex-col bg-background font-sans text-foreground">
         {/* 1200px frame for the header, footer and wide pages, plus the px-4 gutters.
             Other pages read in an 850px column centered inside it. */}
         <div class="mx-auto flex min-h-screen w-full max-w-[calc(1200px+2rem)] flex-col px-4">

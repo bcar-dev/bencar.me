@@ -1,10 +1,15 @@
 @layer components {
+    /* Article text is serif; headings stay in the sans interface face. */
+    .markdown-content {
+        @apply font-serif;
+    }
+
     .markdown-content h2 {
-        @apply mt-10 mb-4 text-2xl font-bold text-foreground;
+        @apply mt-10 mb-4 font-sans text-2xl font-bold text-foreground;
     }
 
     .markdown-content h3 {
-        @apply mt-8 mb-3 text-xl font-bold text-foreground;
+        @apply mt-8 mb-3 font-sans text-xl font-bold text-foreground;
     }
 
     .markdown-content :is(h2, h3) {
