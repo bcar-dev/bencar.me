@@ -26,29 +26,20 @@ What I'm planning to write about:
 
 ## The tech stack of this site
 
+_Updated in June 2026, after moving the site from Next.js to Astro._
+
 This site is built with:
 
-- **Next.js** (React) for the framework
+- **Astro** for the framework - every page is generated as static HTML, with no JavaScript unless a component needs it
+- **Vue** for the few interactive parts (search, tag filter, table of contents, theme toggle, the home page slider), loaded only where they are used
 - **Tailwind CSS** for styling
 - **Markdown** files with YAML frontmatter for managing blog content
-- A simple file-based content system - no CMS, no database, just `.md` files
+- **Pagefind** for search, with the index generated at build time
+- **Vercel** for hosting
+- A simple file-based content system with just `.md` files
 
 I wanted something lightweight that I could fully control. Writing a post is as simple as creating a new markdown file, and that feels right.
 
-## Inspirations and credits
-
-This site is largely inspired by [Peter Steinberg's own blog](https://steipete.me/). Although I've taken a different approach to the tech stack, the overall design and layouts are similar.
-
-I was really seduced by many things:
-
-- how the design feels, the colors, the typography, the simplicity
-- how it's intuitive to navigate
-- how easy it is to write a post, just create a new markdown file and voilà!
-
-Looking at his source code allowed me to learn about Astro, which looks like an excellent fit for building static sites with Markdown. However, I wanted to see if I could recreate it with React, Next.js, and Tailwind, as that is a tech stack I'm a bit more familiar with.
-
-Although I had to add a bit more configuration to the project to make it work with React, it still does the job.
-
 ## What's next?
 
-I plan to write regularly. Some posts will be technical deep-dives, others will be more casual reflections. If you're here, thanks for reading - and stay tuned.
+I plan to write regularly. Some posts will be technical deep-dives, others will be more casual reflections. Thanks for reading and stay tuned.
