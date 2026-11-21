@@ -128,7 +128,7 @@ describe('posts/[slug].astro', () => {
         expect(html).toContain('#a-detail');
     });
 
-    it('renders the hero image when the post has one', async () => {
+    it('keeps the cover image off the article page', async () => {
         getPostWithNeighbors.mockReturnValue({
             post: makePost({
                 slug: 'with-hero',
@@ -139,21 +139,22 @@ describe('posts/[slug].astro', () => {
         });
         getHeroImage.mockReturnValue(heroMetadata);
         const html = await render({ id: 'with-hero' });
-        expect(html).toContain('alt="A hero"');
+        expect(html).not.toContain('alt="A hero"');
+        expect(html).not.toMatch(/<img[^>]+hero\.png/);
     });
 
-    it('falls back to the post title as hero alt text', async () => {
+    it('still uses the cover image as the social share image', async () => {
         getPostWithNeighbors.mockReturnValue({
             post: makePost({
-                slug: 'no-alt',
-                frontmatter: { title: 'Untitled Hero', heroImage: '/assets/img/hero.png' },
+                slug: 'with-hero',
+                frontmatter: { heroImage: '/assets/img/hero.png' },
             }),
             prev: null,
             next: null,
         });
         getHeroImage.mockReturnValue(heroMetadata);
-        const html = await render({ id: 'no-alt' });
-        expect(html).toContain('alt="Untitled Hero"');
+        const html = await render({ id: 'with-hero' });
+        expect(html).toContain(`property="og:image" content="${siteConfig.url}/_astro/hero.png"`);
     });
 
     it('emits JSON-LD with the post headline and escapes angle brackets', async () => {
