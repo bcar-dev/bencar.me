@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Icon from '@/components/Icon.vue';
+import { useActiveHeading } from '@/composables/useActiveHeading';
 
 export interface TocEntry {
     text: string;
@@ -9,11 +9,7 @@ export interface TocEntry {
 
 const props = defineProps<{ headings: ReadonlyArray<TocEntry> }>();
 
-function prefixFor(index: number, level: number): string {
-    if (level !== 2) return '';
-    const h2Number = props.headings.slice(0, index + 1).filter((h) => h.level === 2).length;
-    return `${h2Number}. `;
-}
+const activeSlug = useActiveHeading(() => props.headings.map((heading) => heading.slug));
 
 function handleClick(event: MouseEvent, slug: string) {
     event.preventDefault();
@@ -28,35 +24,26 @@ function handleClick(event: MouseEvent, slug: string) {
 </script>
 
 <template>
-    <aside
-        v-if="headings.length > 0"
-        class="not-prose my-10 p-5 rounded-lg border border-border bg-muted dark:bg-foreground/5 shadow-sm text-foreground/75 mb-12"
-    >
-        <h2 class="text-lg font-bold mt-0 mb-3 flex items-center gap-2 text-foreground">
-            <span class="text-accent">
-                <Icon name="list" class="w-4 h-4" />
-            </span>
-            Contents
-        </h2>
-        <nav>
-            <ul class="space-y-2">
-                <li
-                    v-for="(heading, index) in headings"
-                    :key="heading.slug"
-                    :style="{ paddingLeft: heading.level === 3 ? '1.5rem' : '0' }"
+    <!-- The list's left border is the track. The current link's own border
+         overlaps it (-ml-[2px]) to mark where the reader is. -->
+    <nav v-if="headings.length > 0" aria-label="Table of contents">
+        <ul class="space-y-3 border-l-2 border-border">
+            <li v-for="heading in headings" :key="heading.slug">
+                <a
+                    :href="`#${heading.slug}`"
+                    :aria-current="heading.slug === activeSlug ? 'location' : undefined"
+                    class="-ml-[2px] block border-l-2 text-sm leading-5 transition-colors"
+                    :class="[
+                        heading.level === 3 ? 'pl-7' : 'pl-4',
+                        heading.slug === activeSlug
+                            ? 'border-accent text-foreground'
+                            : 'border-transparent text-foreground/60 hover:text-accent',
+                    ]"
+                    @click="handleClick($event, heading.slug)"
                 >
-                    <a
-                        :href="`#${heading.slug}`"
-                        class="hover:text-accent transition-all duration-200 ease-out inline-block hover:scale-[1.02] origin-left text-sm sm:text-base leading-snug"
-                        @click="handleClick($event, heading.slug)"
-                    >
-                        <span class="text-foreground/60 mr-1.5 opacity-70 font-medium">
-                            {{ prefixFor(index, heading.level) }}
-                        </span>
-                        {{ heading.text }}
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+                    {{ heading.text }}
+                </a>
+            </li>
+        </ul>
+    </nav>
 </template>
