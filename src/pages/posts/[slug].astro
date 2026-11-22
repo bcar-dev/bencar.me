@@ -5,6 +5,7 @@ import Tag from '@/components/ui/Tag.vue';
 import PostMeta from '@/components/ui/PostMeta.vue';
 import PostNavigation from '@/components/ui/PostNavigation.astro';
 import TableOfContents from '@/components/ui/TableOfContents.vue';
+import ImageZoom from '@/components/ui/ImageZoom.vue';
 import { getPostWithNeighbors } from '@/lib/posts';
 import { getHeroImage } from '@/lib/heroImages';
 import { siteConfig } from '@/config/site';
@@ -89,6 +90,7 @@ const jsonLd = JSON.stringify({
         <div class="prose prose-lg dark:prose-invert max-w-none markdown-content">
             <Content />
         </div>
+        <ImageZoom client:idle />
 
         <div class="mt-12 flex flex-col space-y-8">
             <hr class="border-border opacity-50" />

@@ -146,6 +146,17 @@ describe('posts/[slug].astro', () => {
         expect(body).not.toContain('aria-label="Table of contents"');
     });
 
+    it('mounts the image zoom on the article page', async () => {
+        getPostWithNeighbors.mockReturnValue({
+            post: makePost({ slug: 'with-images' }),
+            prev: null,
+            next: null,
+        });
+        getHeroImage.mockReturnValue(undefined);
+        const html = await render({ id: 'with-images' });
+        expect(html).toContain('aria-label="Zoomed image"');
+    });
+
     it('keeps the cover image off the article page', async () => {
         getPostWithNeighbors.mockReturnValue({
             post: makePost({
