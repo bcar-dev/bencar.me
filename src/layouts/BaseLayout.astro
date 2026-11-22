@@ -12,17 +12,9 @@ interface Props {
     description?: string;
     ogType?: 'website' | 'article';
     image?: string;
-    /** Let the page use the full 1200px frame instead of the centered 850px reading column. */
-    wide?: boolean;
 }
 
-const {
-    title,
-    description = siteConfig.description,
-    ogType = 'website',
-    image,
-    wide = false,
-} = Astro.props;
+const { title, description = siteConfig.description, ogType = 'website', image } = Astro.props;
 
 const pageTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
 const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
@@ -82,16 +74,11 @@ const ogImage = image ? new URL(image, siteConfig.url).href : undefined;
         </script>
     </head>
     <body class="flex min-h-screen flex-col bg-background font-sans text-foreground">
-        {/* 1200px frame for the header, footer and wide pages, plus the px-4 gutters.
-            Other pages read in an 850px column centered inside it. */}
+        {/* One 1200px frame, plus the px-4 gutters, shared by the header, every page and
+            the footer, so their edges line up. */}
         <div class="mx-auto flex min-h-screen w-full max-w-[calc(1200px+2rem)] flex-col px-4">
             <Header />
-            <main
-                class:list={[
-                    'mx-auto flex w-full flex-1 flex-col items-center',
-                    !wide && 'max-w-[850px]',
-                ]}
-            >
+            <main class="flex w-full flex-1 flex-col items-center">
                 <slot />
             </main>
             <Footer />

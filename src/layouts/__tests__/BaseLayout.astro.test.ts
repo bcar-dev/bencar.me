@@ -68,12 +68,11 @@ describe('BaseLayout.astro', () => {
         expect(html).toContain(siteConfig.author.name);
     });
 
-    it('keeps page content in the reading column unless the page asks for the wide frame', async () => {
-        const mainTag = (html: string) => html.match(/<main[^>]*>/)?.[0] ?? '';
-        const reading = await container.renderToString(BaseLayout);
-        expect(mainTag(reading)).toContain('max-w-[850px]');
-        const wide = await container.renderToString(BaseLayout, { props: { wide: true } });
-        expect(mainTag(wide)).not.toContain('max-w-[850px]');
+    it('lets page content fill the same frame as the header, so their edges line up', async () => {
+        const html = await container.renderToString(BaseLayout);
+        const mainTag = html.match(/<main[^>]*>/)?.[0] ?? '';
+        expect(mainTag).toContain('w-full');
+        expect(mainTag).not.toContain('max-w-');
     });
 
     it('loads the site fonts', async () => {

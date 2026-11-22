@@ -56,12 +56,12 @@ const jsonLd = JSON.stringify({
     ogType="article"
     image={hero?.src}
 >
-    <article class="relative py-8 w-full">
+    <article class="relative py-8 w-full lg:pr-[240px]">
         <script type="application/ld+json" set:html={jsonLd} is:inline />
-        {/* Contents rail in the right margin beside the centered article. The 850px
-            article + 40px gap + 200px rail only clears the viewport edge from
-            1400px. Below that the rail is hidden, so client:visible never hydrates it. */}
-        <aside class="absolute inset-y-8 left-full ml-10 hidden w-[200px] min-[1400px]:block">
+        {/* Contents rail in the article's right padding: 40px gap + 200px rail, its right
+            edge on the frame's. Below lg the rail is hidden, so client:visible never
+            hydrates it. */}
+        <aside class="absolute inset-y-8 right-0 hidden w-[200px] lg:block">
             <div class="sticky top-20 max-h-[calc(100vh-7rem)] overflow-y-auto">
                 <TableOfContents headings={tocEntries} client:visible />
             </div>
