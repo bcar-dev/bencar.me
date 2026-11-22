@@ -53,6 +53,11 @@
         @apply text-foreground/90;
     }
 
+    /* ImageZoom opens these; an image inside a link keeps the link's cursor. */
+    .markdown-content img:not(a img) {
+        @apply cursor-zoom-in;
+    }
+
     /* Cap the height so portrait photos don't fill several screens. --ratio
        (width / height, set at build time by rehypeImageRatio) turns that height cap
        into a width cap, so the image keeps its width/height attributes and the

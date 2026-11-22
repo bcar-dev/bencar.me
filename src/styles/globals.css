@@ -46,6 +46,11 @@
         scrollbar-gutter: stable;
     }
 
+    /* Keep the article still behind the image zoom; the stable gutter stops the layout shifting. */
+    html:has(dialog[open]) {
+        overflow: hidden;
+    }
+
     body {
         @apply flex min-h-screen flex-col bg-background font-sans text-foreground;
     }
