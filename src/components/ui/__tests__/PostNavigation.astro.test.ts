@@ -35,10 +35,10 @@ describe('PostNavigation.astro', () => {
                 nextPost: makePost('newer', 'Newer Post'),
             },
         });
-        expect(html).toContain('href="/posts/older"');
+        expect(html).toContain('href="/posts/older#top"');
         expect(html).toContain('Older Post');
         expect(html).toContain('Previous Post');
-        expect(html).toContain('href="/posts/newer"');
+        expect(html).toContain('href="/posts/newer#top"');
         expect(html).toContain('Newer Post');
         expect(html).toContain('Next Post');
     });
@@ -47,7 +47,7 @@ describe('PostNavigation.astro', () => {
         const html = await container.renderToString(PostNavigation, {
             props: { prevPost: makePost('older', 'Older Post'), nextPost: null },
         });
-        expect(html).toContain('href="/posts/older"');
+        expect(html).toContain('href="/posts/older#top"');
         expect(html).toContain('Previous Post');
         expect(html).not.toContain('Next Post');
     });
@@ -56,7 +56,7 @@ describe('PostNavigation.astro', () => {
         const html = await container.renderToString(PostNavigation, {
             props: { prevPost: null, nextPost: makePost('newer', 'Newer Post') },
         });
-        expect(html).toContain('href="/posts/newer"');
+        expect(html).toContain('href="/posts/newer#top"');
         expect(html).toContain('Next Post');
         expect(html).not.toContain('Previous Post');
     });

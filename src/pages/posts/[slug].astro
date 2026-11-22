@@ -55,7 +55,7 @@ const jsonLd = JSON.stringify({
     ogType="article"
     image={hero?.src}
 >
-    <article class="relative py-8 w-full lg:pr-[240px]">
+    <article class="relative py-8 w-full lg:pr-[240px]" id="top">
         <script type="application/ld+json" set:html={jsonLd} is:inline />
         {/* Contents rail in the article's right padding: 40px gap + 200px rail, its right
             edge on the frame's. Below lg the rail is hidden, so client:visible never
@@ -65,7 +65,7 @@ const jsonLd = JSON.stringify({
                 <TableOfContents headings={tocEntries} client:visible />
             </div>
         </aside>
-        <header class="mb-8" id="top">
+        <header class="mb-8">
             <h1 class="text-3xl font-bold tracking-tight sm:text-4xl w-fit">
                 {post.frontmatter.title}
             </h1>

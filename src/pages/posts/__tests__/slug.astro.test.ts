@@ -104,8 +104,8 @@ describe('posts/[slug].astro', () => {
         });
         getHeroImage.mockReturnValue(undefined);
         const html = await render({ id: 'middle' });
-        expect(html).toContain('href="/posts/older"');
-        expect(html).toContain('href="/posts/newer"');
+        expect(html).toContain('href="/posts/older#top"');
+        expect(html).toContain('href="/posts/newer#top"');
     });
 
     it('builds the table of contents from the post headings', async () => {
