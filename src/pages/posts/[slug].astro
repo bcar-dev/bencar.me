@@ -4,7 +4,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Tag from '@/components/ui/Tag.vue';
 import PostMeta from '@/components/ui/PostMeta.vue';
 import PostNavigation from '@/components/ui/PostNavigation.astro';
-import BackToTop from '@/components/ui/BackToTop.vue';
 import TableOfContents from '@/components/ui/TableOfContents.vue';
 import { getPostWithNeighbors } from '@/lib/posts';
 import { getHeroImage } from '@/lib/heroImages';
@@ -92,10 +91,6 @@ const jsonLd = JSON.stringify({
         </div>
 
         <div class="mt-12 flex flex-col space-y-8">
-            <div class="flex justify-center">
-                <BackToTop client:visible />
-            </div>
-
             <hr class="border-border opacity-50" />
 
             <PostNavigation prevPost={prev} nextPost={next} />
