@@ -12,6 +12,9 @@ export default getViteConfig({
     },
     test: {
         environment: 'jsdom',
+        // The on-disk module cache keeps import.meta.glob results from an earlier run, so an image added or removed
+        // under src/assets went unseen and the blog content test checked a stale list.
+        fsModuleCache: false,
         globals: true,
         setupFiles: ['./src/test/setup.ts'],
         include: ['src/**/*.{test,spec}.{ts,tsx}', 'scripts/**/*.{test,spec}.{ts,tsx}'],
