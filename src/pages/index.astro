@@ -43,7 +43,7 @@ const featuredSlides: FeaturedSlide[] = await Promise.all(
 );
 ---
 
-<BaseLayout wide>
+<BaseLayout>
     <h1 class="sr-only">{siteConfig.name} - Home</h1>
     {posts.length === 0 ? (
         <p class="py-16 text-foreground/75 italic">No posts yet. Stay tuned!</p>

@@ -42,6 +42,8 @@
 
     html {
         @apply scroll-smooth;
+        /* Reserve the scrollbar track on short pages too, so the centered frame doesn't shift between pages. */
+        scrollbar-gutter: stable;
     }
 
     body {
