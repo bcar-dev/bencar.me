@@ -20,12 +20,16 @@ const hero = getHeroImage(post.frontmatter.heroImage);
             class="text-sm text-foreground/60"
         />
         <div class="aspect-square overflow-hidden rounded-lg border border-border bg-foreground/5">
-            {/* Decorative: the title below already names the link. */}
+            {/* Decorative: the title below already names the link. Cropped to the square
+                tile at build time: object-cover would draw a landscape cover wider than
+                the tile, so the srcset picked from sizes would be too small and blurry. */}
             {hero && (
                 <Image
                     src={hero}
                     alt=""
-                    widths={[320, 640]}
+                    width={768}
+                    height={768}
+                    widths={[320, 640, 768]}
                     sizes="(min-width: 1232px) 288px, (min-width: 1024px) 24vw, (min-width: 640px) 48vw, 100vw"
                     class="h-full w-full object-cover"
                 />
